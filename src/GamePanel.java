@@ -171,10 +171,10 @@ public class GamePanel extends JPanel
 			
 	}
 	
-	public void paintMissile(Missileship ms, int y) {
+	public void paintMissile(Missileship ms, int y, int x) {
 		System.out.println("the fuck");
 		//mship = new Missileship();
-		mship.setX(hero.getX());
+		mship.setX(x);
 		mship.setY(y);
 		
 		mship.draw(graph);

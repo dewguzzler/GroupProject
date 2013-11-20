@@ -6,6 +6,7 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 /**
@@ -42,6 +43,11 @@ public class MissileRunnable extends JPanel implements Runnable {
 		// gp.stopBackgroundMusic();
 		// gp.playBackgroundMusic();
 	}
+	
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+	}
 
 	@Override
 	public void run() {
@@ -71,9 +77,10 @@ public class MissileRunnable extends JPanel implements Runnable {
 				// }
 				 System.out.println(y);
 				
-				gp.paintMissile(ms, y-30);
-					Thread.sleep(200);
-					//gp.repaint();
+				gp.paintMissile(ms, y-30, x);
+					Thread.currentThread().sleep(100);
+					gp.repaint();
+					Thread.currentThread().sleep(100);
 					moveMissile(x, y-30, dir);
 				//gp.repaint();
 			} else {
