@@ -14,7 +14,7 @@ import javax.swing.JPanel;
  * 
  */
 
-public class MissileRunnable extends JPanel implements Runnable {
+public class EnemyMissileRunnable extends JPanel implements Runnable {
 
 	/**
 	 * 
@@ -32,16 +32,15 @@ public class MissileRunnable extends JPanel implements Runnable {
 
 	public static final Lock lock = new ReentrantLock();
 
-	public MissileRunnable(Graphics g, int startX, int startY, Missileship ms, GamePanel gp, String dir, HeroShip hs,
-			JPanel jp) {
-		MissileRunnable.startX = startX;
-		MissileRunnable.startY = startY;
-		MissileRunnable.g = g;
-		MissileRunnable.ms = ms;
-		MissileRunnable.gp = gp;
-		MissileRunnable.dir = dir;
-		MissileRunnable.hs = hs;
-		MissileRunnable.jp = jp;
+	public EnemyMissileRunnable(Graphics g, int startX, int startY, Missileship ms, GamePanel gp, String dir, HeroShip hs, JPanel jp) {
+		EnemyMissileRunnable.startX = startX;
+		EnemyMissileRunnable.startY = startY;
+		EnemyMissileRunnable.g = g;
+		EnemyMissileRunnable.ms = ms;
+		EnemyMissileRunnable.gp = gp;
+		EnemyMissileRunnable.dir = dir;
+		EnemyMissileRunnable.hs = hs;
+		EnemyMissileRunnable.jp = jp;
 		//System.out.println(startY);
 		// gp.stopBackgroundMusic();
 		// gp.playBackgroundMusic();
@@ -54,7 +53,7 @@ public class MissileRunnable extends JPanel implements Runnable {
 
 	@Override
 	public void run() {
-		 if(MissileRunnable.lock.tryLock()) {
+		 if(EnemyMissileRunnable.lock.tryLock()) {
 		try {
 			moveMissile(startX, startY, dir, hs);
 		} catch (Exception e) {
@@ -63,7 +62,7 @@ public class MissileRunnable extends JPanel implements Runnable {
 		}
 		  finally
          {
-             MissileRunnable.lock.unlock();
+             EnemyMissileRunnable.lock.unlock();
          }
 		 }
 		// g.drawImage(i, startX+30, startY, 20, 50, o);
@@ -79,8 +78,7 @@ public class MissileRunnable extends JPanel implements Runnable {
 			if (y > 0 && !ms.isHit()) {
 //				startY = startY - 30;
 				//y = startY;
-				 if (y < 100) {
-					 //this is where the code goes to check if the coords match up with enemy ship
+				 if (y < 200) {
 				 ms.setHit(true);
 				 //gp.playBackgroundMusic();
 				

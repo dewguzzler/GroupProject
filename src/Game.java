@@ -24,6 +24,7 @@ public class Game extends JFrame implements KeyEventDispatcher
 	private WelcomeScreenPanel welcomeScreenPanel;
 	private GamePanel gamePanel;
 	public int j = 0;
+	private boolean user;
 	
 	public Game()
 	{
@@ -112,11 +113,13 @@ public class Game extends JFrame implements KeyEventDispatcher
         	}
         	else if (e.getKeyCode() == KeyEvent.VK_SPACE)
         	{
-        		int x = gamePanel.getHeroX();
+        		int x = gamePanel.getHeroX() + 30;
         		
-        		int y = 500;
+        		int y = gamePanel.getHeroY();
+        		System.out.println(y);
         		try {
-					gamePanel.shootMissile(x, y, gamePanel, j);
+        			user = true;
+					gamePanel.shootMissile(x, y, gamePanel, j, user, centerPanel);
 					j++;
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block

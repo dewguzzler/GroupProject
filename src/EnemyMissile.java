@@ -15,13 +15,13 @@ import javax.swing.JPanel;
  * @author jesse
  *
  */
-public class Missileship extends Ship
+public class EnemyMissile extends Ship
 {
 	private static final long serialVersionUID = 1L;
 
-	public Missileship()
+	public EnemyMissile()
 	{
-		super(new ImageIcon(Missileship.class.getResource("res/images/bullet.png")),
-				100, 15);
+		super(new ImageIcon(EnemyMissile.class.getResource("res/images/bullet.png")),
+				200, 500);
 	}
 }
