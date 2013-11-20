@@ -104,9 +104,10 @@ public class MissileRunnable extends JPanel implements Runnable {
 		// startY = y -30;
 		ms.setX(x);
 		ms.setY(startY);
+		ms.draw(g);
 		gp.repaint();
 		ms.setOpaque(false);
-		ms.draw(g);
+		
 
 	}
 
