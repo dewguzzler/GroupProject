@@ -25,90 +25,87 @@ public class MissileRunnable extends JPanel implements Runnable {
 	private static final long serialVersionUID = 1L;
 	public static int startX;
 	public static int startY;
-	public Graphics g;
+	public static Graphics g;
 	public static GamePanel gp;
 	public static Image i;
 	private static Missileship ms;
 	private static String dir;
 
-	public MissileRunnable(Graphics g, int startX, int startY, Missileship ms,
-			BufferedImage i, GamePanel gp, String dir) {
+	public MissileRunnable(Graphics g, int startX, int startY, Missileship ms, GamePanel gp, String dir) {
 		MissileRunnable.startX = startX;
 		MissileRunnable.startY = startY;
-		this.g = g;
-		MissileRunnable.i = i;
+		MissileRunnable.g = g;
 		MissileRunnable.ms = ms;
 		MissileRunnable.gp = gp;
 		MissileRunnable.dir = dir;
 		System.out.println(startY);
-		//gp.stopBackgroundMusic();
-		//gp.playBackgroundMusic();
+		// gp.stopBackgroundMusic();
+		// gp.playBackgroundMusic();
 	}
 
 	@Override
 	public void run() {
-		ms.setX(startX);
-		ms.setY(startY);
-		gp.repaint();
-		ms.setOpaque(false);
-		ms.draw(g);
-		// g.drawImage(i, startX+30, startY, 20, 50, o);
-		if (dir.equalsIgnoreCase("up")) {
-			
-
-			while (startY > 0 && !ms.isHit()) {
-				try {
-					Thread.sleep(24);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				startY = startY - 30;
-				int y = startY;
-//				if (y < 200) {
-//					ms.setHit(true);
-//					//gp.playBackgroundMusic();
-//				
-//				}
-				// System.out.println(y);
-				moveMissile(startX, y, dir);
-				// ms.draw(g);
-			}
-		} else {
-
-			while (startY < 600 && !ms.isHit()) {
-				try {
-					Thread.sleep(24);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				startY = startY + 30;
-				int y = startY;
-//				if (ms.getY()) {
-//					ms.setHit(true);
-//				}
-				// System.out.println(y);
-				moveMissile(startX, y, dir);
-				// ms.draw(g);
-			}
-
+		try {
+			moveMissile(startX, startY, dir);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		// g.drawImage(i, startX+30, startY, 20, 50, o);
 
 	}
 
-	public void moveMissile(int x, int y, String dir) {
-		// g.drawImage(i, x, y-30, 20, 50, o);
-		// startY = y -30;
-		ms.setX(x);
-		ms.setY(startY);
-		ms.draw(g);
-		gp.repaint();
-		ms.setOpaque(false);
+	public void moveMissile(int x, int y, String dir) throws Exception {
+		System.out.println("get here");
 		
+		
+		if (dir.equalsIgnoreCase("up")) {
 
+			if (y > 0 && !ms.isHit()) {
+//				startY = startY - 30;
+				//y = startY;
+				// if (y < 200) {
+				// ms.setHit(true);
+				// //gp.playBackgroundMusic();
+				//
+				// }
+				 System.out.println(y);
+				
+				gp.paintMissile(ms, y-30);
+					Thread.sleep(200);
+					//gp.repaint();
+					moveMissile(x, y-30, dir);
+				//gp.repaint();
+			} else {
+				gp.repaint();
+			}
+		}
+//		} else {
+//
+//			while (startY < 600 && !ms.isHit()) {
+//				try {
+//
+//					startY = startY + 30;
+//					y = startY;
+//					// if (ms.getY()) {
+//					// ms.setHit(true);
+//					// }
+//					// System.out.println(y);
+//
+//					ms.setY(y);
+//					System.out.println(y);
+//
+//					ms.draw(g);
+//					Thread.sleep(200);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				// ms.draw(g);
+//			}
+//
+//		}
+//
 	}
 
 }

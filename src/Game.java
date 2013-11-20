@@ -114,9 +114,9 @@ public class Game extends JFrame implements KeyEventDispatcher
         	{
         		int x = gamePanel.getHeroX();
         		
-        		int y = 0;
+        		int y = 500;
         		try {
-					gamePanel.shootMissile(x, y, gamePanel, j);
+					gamePanel.shootMissile(200, 200, gamePanel, j);
 					j++;
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block

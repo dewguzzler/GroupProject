@@ -152,43 +152,58 @@ public class GamePanel extends JPanel
 		return x;
 	}
 	
-	public void moveMissile(GamePanel gr) throws Exception
+	public void moveMissile() throws Exception
 	{
 		if(mship.getY() > 0) {
 			
-			mship.setY(mship.getY() - 10);
+			mship.setY(mship.getY() - 30);
 			System.out.println(mship.getY());
 			//mship.setVisible(false);
 			//repaint();
-			repaint();
+			//repaint();
 			
 			mship.setOpaque(false);
 			mship.draw(graph);
 			//mship.update(graph);
-			moveMissile(gr);
+//			Thread.sleep(24);
+//			moveMissile();
 		}
 			
+	}
+	
+	public void paintMissile(Missileship ms, int y) {
+		System.out.println("the fuck");
+		//mship = new Missileship();
+		mship.setX(hero.getX());
+		mship.setY(y);
+		
+		mship.draw(graph);
+		//mship.repaint();
+		//repaint();
 	}
 	
 	
 	public void shootMissile(int x, int y, GamePanel g, int j) throws Exception {
 		mship = new Missileship();
-		int ys = hero.getY();
-		System.out.println(hero.getY());
-
-//		gamePanel = g;
-//		mship.setX(x);
-//		mship.setY(y);
+		y = hero.getY();
+		System.out.println(x + " " + y);
+//		mship.setX(hero.getX());
+//		mship.setY(y-60);
 //		mship.draw(graph);
-//		moveMissile(gamePanel);
+
+		gamePanel = g;
+//		mship.setX(x);
+//		mship.setY(ys);
+//		mship.draw(graph);
+//		mship.setOpaque(false);
+		playFiringMusic();
+		//moveMissile();
 		//System.out.println(ms);
 		name = "mrs" + j;
-		BufferedImage missile = ImageIO.read(new File("src/res/images/bullet.png"));
-		MissileRunnable name = new MissileRunnable(graph, x, ys - 50, mship, missile, g, "up");
+		MissileRunnable name = new MissileRunnable(graph, x, y - 50, mship, g, "up");
 		Thread miss = new Thread(name);
 		miss.start();
-		playFiringMusic();
-		//stopBackgroundMusic();
+//		//stopBackgroundMusic();
 //		if(miss.isInterrupted()) {
 //			playBackgroundMusic();
 //		}
