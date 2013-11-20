@@ -28,11 +28,11 @@ public class EnemyMissileRunnable extends JPanel implements Runnable {
 	private static Missileship ms;
 	private static String dir;
 	private static HeroShip hs;
-	private static JPanel jp;
+	private static Game jp;
 
 	public static final Lock lock = new ReentrantLock();
 
-	public EnemyMissileRunnable(Graphics g, int startX, int startY, Missileship ms, GamePanel gp, String dir, HeroShip hs, JPanel jp) {
+	public EnemyMissileRunnable(Graphics g, int startX, int startY, Missileship ms, GamePanel gp, String dir, HeroShip hs, Game jp) {
 		EnemyMissileRunnable.startX = startX;
 		EnemyMissileRunnable.startY = startY;
 		EnemyMissileRunnable.g = g;

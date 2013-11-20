@@ -28,12 +28,12 @@ public class MissileRunnable extends JPanel implements Runnable {
 	private static Missileship ms;
 	private static String dir;
 	private static HeroShip hs;
-	private static JPanel jp;
+	private static Game jp;
 
 	public static final Lock lock = new ReentrantLock();
 
 	public MissileRunnable(Graphics g, int startX, int startY, Missileship ms, GamePanel gp, String dir, HeroShip hs,
-			JPanel jp) {
+			Game jp) {
 		MissileRunnable.startX = startX;
 		MissileRunnable.startY = startY;
 		MissileRunnable.g = g;
@@ -56,6 +56,8 @@ public class MissileRunnable extends JPanel implements Runnable {
 	public void run() {
 		 if(MissileRunnable.lock.tryLock()) {
 		try {
+
+			gp.playFiringMusic();
 			moveMissile(startX, startY, dir, hs);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -86,7 +88,6 @@ public class MissileRunnable extends JPanel implements Runnable {
 				
 				 }
 				 //System.out.println(y);
-				
 				gp.paintMissile(ms, y, x);
 					Thread.currentThread().sleep(21);
 					gp.repaint();
@@ -120,6 +121,7 @@ public class MissileRunnable extends JPanel implements Runnable {
 				 System.out.println(y);
 				
 				gp.paintMissile(ms, y, x);
+				gp.playFiringMusic();
 					Thread.currentThread().sleep(200);
 					gp.repaint();
 					Thread.currentThread().sleep(200);

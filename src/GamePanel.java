@@ -184,7 +184,7 @@ public class GamePanel extends JPanel {
 		// repaint();
 	}
 
-	public void paintPlayerExplosion(int y, int x, JPanel jp) {
+	public void paintPlayerExplosion(int y, int x, Game jp) {
 		System.out.println("the fuck");
 		Explosion ex = new Explosion();
 		ex.setY(hero.getY());
@@ -204,6 +204,12 @@ public class GamePanel extends JPanel {
 			System.out.println("Game Over");
 			
 			showGameOverScreen();
+			jp.switchToWelcomeScreenPanel();
+			lives = 3;
+			livesTextArea.setText("LIVES " + lives + "/3");
+			points = 0;
+			pointsTextArea.setText("POINTS " + FORMATTER.format(points));
+			
 			
 		}
 
@@ -226,7 +232,7 @@ public class GamePanel extends JPanel {
 
 	}
 
-	public void shootMissile(int x, int y, GamePanel g, int j, boolean user, JPanel cp)
+	public void shootMissile(int x, int y, GamePanel g, int j, boolean user, Game cp)
 			throws Exception {
 		
 		// y = hero.getY();
@@ -245,20 +251,20 @@ public class GamePanel extends JPanel {
 		// System.out.println(ms);
 		name = "mrs" + j;
 		if (user) {
-			playFiringMusic();
 			mship = new Missileship();
 			MissileRunnable name = new MissileRunnable(graph, x + 15, y - 20,
 					mship, g, "up", hero, cp);
 			Thread miss = new Thread(name);
 			if (!miss.isAlive()) {
 				miss.start();
+				//playFiringMusic();
 			}
 		}
 		if (!user) {
 
 			mship = new Missileship();
 			EnemyMissileRunnable names = new EnemyMissileRunnable(graph, x+15, 0,
-					mship, g, "up", hero, cp);
+					mship, g, "down", hero, cp);
 			Thread misss = new Thread(names);
 			if (!misss.isAlive()) {
 				misss.start();

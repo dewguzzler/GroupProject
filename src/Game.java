@@ -25,10 +25,12 @@ public class Game extends JFrame implements KeyEventDispatcher
 	private GamePanel gamePanel;
 	public int j = 0;
 	private boolean user;
+	private static Game game;
 	
 	public Game()
 	{
 		super("Galaxian");
+		game = this;
 		setSize(DEFAULT_SIZE);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -119,7 +121,7 @@ public class Game extends JFrame implements KeyEventDispatcher
         		System.out.println(y);
         		try {
         			user = true;
-					gamePanel.shootMissile(x, y, gamePanel, j, user, centerPanel);
+					gamePanel.shootMissile(x, y, gamePanel, j, user, game);
 					j++;
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
