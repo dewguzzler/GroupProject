@@ -78,9 +78,9 @@ public class MissileRunnable extends JPanel implements Runnable {
 				 System.out.println(y);
 				
 				gp.paintMissile(ms, y-30, x);
-					Thread.currentThread().sleep(100);
+					Thread.currentThread().sleep(12);
 					gp.repaint();
-					Thread.currentThread().sleep(100);
+					Thread.currentThread().sleep(12);
 					moveMissile(x, y-30, dir);
 				//gp.repaint();
 			} else {
