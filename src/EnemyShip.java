@@ -7,10 +7,10 @@ import javax.swing.ImageIcon;
 public class EnemyShip extends Ship{
 
  private static final long serialVersionUID = 1L;
- public EnemyShip()
+ public EnemyShip(int x, int y)
  {
-  super(new ImageIcon(EnemyShip.class.getResource("res/images/EnemyOfTheState_Transparent.png")),
-    380, 0);
+  super(new ImageIcon(EnemyShip.class.getResource("res/images/Enemy1.png")),
+    x, y);
   
   
   

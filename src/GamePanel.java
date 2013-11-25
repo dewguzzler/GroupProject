@@ -38,14 +38,16 @@ public class GamePanel extends JPanel {
 	private Clip firingSound;
 	private EnemyShip enemy;
 	private EnemyShip[][] enemyArray;
+	private int enemyShipX = 100;
+	private int enemyShipY = 100;
 
 	public GamePanel() {
 		super(new BorderLayout());
 		hero = new HeroShip();
-		enemyArray = new EnemyShip[3][3];
-		for(int i = 0; i< 3; i++) {
-			for(int j = 0; j < 3; j++) {
-				enemyArray[i][j] = new EnemyShip();
+		enemyArray = new EnemyShip[4][5];
+		for(int i = 0; i< 4; i++) {
+			for(int j = 0; j < 5; j++) {
+				enemyArray[i][j] = new EnemyShip(enemyShipX*j, enemyShipY + 40*i);
 				
 				
 			}
@@ -93,14 +95,15 @@ public class GamePanel extends JPanel {
 				GamePanel.class.getResource("res/images/background.png"));
 		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
 		hero.draw(g);
-		for(int i = 0; i< 3; i++) {
-			for(int j = 0; j < 3; j++) {
+		for(int i = 0; i< 4; i++) {
+			for(int j = 0; j < 5; j++) {
 				EnemyShip es = enemyArray[i][j];
-				es.setX(es.getX() + 100*i);
-				if(i>0){
-					es.setY(es.getY() + 100*i);
+				if(es ==null){
+					
 				}
-				es.draw(g);
+				else {
+				es.drawEnemy(g);
+				}
 			}
 		}
 	}
@@ -269,7 +272,7 @@ public class GamePanel extends JPanel {
 		if (user) {
 			mship = new Missileship();
 			MissileRunnable name = new MissileRunnable(graph, x + 15, y - 20,
-					mship, g, "up", hero, cp);
+					mship, g, "up", hero, cp, enemyArray);
 			Thread miss = new Thread(name);
 			if (!miss.isAlive()) {
 				miss.start();

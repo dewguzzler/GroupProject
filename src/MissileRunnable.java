@@ -29,11 +29,13 @@ public class MissileRunnable extends JPanel implements Runnable {
 	private static String dir;
 	private static HeroShip hs;
 	private static Game jp;
+	private static EnemyShip[][] ens;
+	private static EnemyShip eShipHit;
 
 	public static final Lock lock = new ReentrantLock();
 
 	public MissileRunnable(Graphics g, int startX, int startY, Missileship ms, GamePanel gp, String dir, HeroShip hs,
-			Game jp) {
+			Game jp, EnemyShip[][] es) {
 		MissileRunnable.startX = startX;
 		MissileRunnable.startY = startY;
 		MissileRunnable.g = g;
@@ -42,6 +44,7 @@ public class MissileRunnable extends JPanel implements Runnable {
 		MissileRunnable.dir = dir;
 		MissileRunnable.hs = hs;
 		MissileRunnable.jp = jp;
+		MissileRunnable.ens = es;
 		//System.out.println(startY);
 		// gp.stopBackgroundMusic();
 		// gp.playBackgroundMusic();
@@ -81,12 +84,20 @@ public class MissileRunnable extends JPanel implements Runnable {
 			if (y > 0 && !ms.isHit()) {
 //				startY = startY - 30;
 				//y = startY;
-				 if (y < 100) {
-					 //this is where the code goes to check if the coords match up with enemy ship
-				 ms.setHit(true);
-				 //gp.playBackgroundMusic();
-				
-				 }
+				for(int i = 0; i< 4; i++) {
+					for(int j = 0; j < 5; j++) {
+						EnemyShip es = ens[i][j];
+						if(x >= es.getX() && x <= es.getX()+ 100  && y <= es.getY()){
+							ms.setHit(true);
+							eShipHit = es;
+							es.setX(-100);
+							es.setY(-100);
+							System.out.println(ms.getX() + " " + es.getX()  + " " + ms.getY()  + " " + es.getY() + " " + x + " " + y);
+							break;
+						}
+						
+					}
+				}
 				 //System.out.println(y);
 				gp.paintMissile(ms, y, x);
 					Thread.currentThread().sleep(21);
@@ -112,12 +123,12 @@ public class MissileRunnable extends JPanel implements Runnable {
 			if (y < 600 && !ms.isHit()) {
 //				startY = startY - 30;
 				//y = startY;
-				 if (ms.getX() >= hs.getX() && ms.getX() <= hs.getX()+ 100  && ms.getY() >= hs.getY()) {
-				 System.out.println(ms.getY() + " " + hs.getY()+ " " + hs.getX()+ " " + ms.getX());
-					 ms.setHit(true);
-				 //gp.playBackgroundMusic();
-				
-				 }
+//				 if (ms.getX() >= hs.getX() && ms.getX() <= hs.getX()+ 100  && ms.getY() >= hs.getY()) {
+//				 System.out.println(ms.getY() + " " + hs.getY()+ " " + hs.getX()+ " " + ms.getX());
+//					 ms.setHit(true);
+//				 //gp.playBackgroundMusic();
+//				
+//				 }
 				 System.out.println(y);
 				
 				gp.paintMissile(ms, y, x);
