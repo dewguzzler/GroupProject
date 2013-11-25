@@ -96,4 +96,11 @@ public class Ship extends JComponent
 		g.drawImage(icon.getImage(), x, y, 100, 100, this);
 		//g.drawImage(icon.getImage(), x, y, icon.getIconWidth(), icon.getIconHeight(), this);
 	}
+	
+	 public void drawEnemy(Graphics g)
+	 {
+	  
+	  g.drawImage(icon.getImage(), x, y, 100, 100, this);
+	  //g.drawImage(icon.getImage(), x, y, icon.getIconWidth(), icon.getIconHeight(), this);
+	 }
 }

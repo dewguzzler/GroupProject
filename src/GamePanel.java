@@ -36,10 +36,20 @@ public class GamePanel extends JPanel {
 	public String name;
 	private GamePanel gamePanel;
 	private Clip firingSound;
+	private EnemyShip enemy;
+	private EnemyShip[][] enemyArray;
 
 	public GamePanel() {
 		super(new BorderLayout());
 		hero = new HeroShip();
+		enemyArray = new EnemyShip[3][3];
+		for(int i = 0; i< 3; i++) {
+			for(int j = 0; j < 3; j++) {
+				enemyArray[i][j] = new EnemyShip();
+				
+				
+			}
+		}
 		initPointsPanel();
 		initLivesPanel();
 	}
@@ -83,6 +93,16 @@ public class GamePanel extends JPanel {
 				GamePanel.class.getResource("res/images/background.png"));
 		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
 		hero.draw(g);
+		for(int i = 0; i< 3; i++) {
+			for(int j = 0; j < 3; j++) {
+				EnemyShip es = enemyArray[i][j];
+				es.setX(es.getX() + 100*i);
+				if(i>0){
+					es.setY(es.getY() + 100*i);
+				}
+				es.draw(g);
+			}
+		}
 	}
 
 	public void playBackgroundMusic() {
@@ -133,7 +153,6 @@ public class GamePanel extends JPanel {
 
 	public int getHeroY() {
 		int y = hero.getY();
-		System.out.println(y);
 		return y + 30;
 	}
 
@@ -172,9 +191,6 @@ public class GamePanel extends JPanel {
 		Explosion ex = new Explosion();
 		ex.setY(y);
 		ex.setX(x);
-		// mship = new Missileship();
-		// mship.setX(x);
-		// mship.setY(y);
 		graph.drawImage(ex.getIcon().getImage(), x, y, 50, 50, this);
 		points = points + 15;
 		pointsTextArea.setText("POINTS " + FORMATTER.format(points));
