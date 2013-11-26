@@ -283,7 +283,7 @@ public class GamePanel extends JPanel {
 			
 			showGameOverScreen();
 			jp.switchToWelcomeScreenPanel();
-			lives = 3;
+			lives = 4;
 			livesTextArea.setText("LIVES " + lives + "/3");
 			points = 0;
 			pointsTextArea.setText("POINTS " + FORMATTER.format(points));
@@ -317,6 +317,10 @@ public class GamePanel extends JPanel {
 		repaint();
 		startMoving(jp, wsp);
 		
+	}
+	
+	public void startNextLevel(Game jp, int level) throws Exception {
+		jp.switchToLevelPanel(level);
 	}
 
 	public void showGameOverScreen() {

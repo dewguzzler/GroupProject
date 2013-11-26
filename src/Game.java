@@ -23,6 +23,9 @@ public class Game extends JFrame implements KeyEventDispatcher
 	private JPanel centerPanel;
 	private WelcomeScreenPanel welcomeScreenPanel;
 	private GamePanel gamePanel;
+	private LevelScreenPanel levelOnePanel;
+	private LevelScreenPanel levelTwoPanel;
+	private LevelScreenPanel levelThreePanel;
 	public int j = 0;
 	private boolean user;
 	private static Game game;
@@ -42,8 +45,14 @@ public class Game extends JFrame implements KeyEventDispatcher
         centerPanel = new JPanel(new CardLayout());
 		welcomeScreenPanel = new WelcomeScreenPanel(this);
 		gamePanel = new GamePanel(game);
+		
+
+		createLevelPanels();
 	
 		centerPanel.add(welcomeScreenPanel, "Welcome Screen Panel");
+		centerPanel.add(levelOnePanel, "Welcome to Level :1");
+		centerPanel.add(levelTwoPanel, "Welcome to Level :2");
+		centerPanel.add(levelThreePanel, "Welcome to Level :3");
 		centerPanel.add(gamePanel, "Game Panel");
 		
 		add(centerPanel, BorderLayout.CENTER);
@@ -65,11 +74,26 @@ public class Game extends JFrame implements KeyEventDispatcher
 		welcomeScreenPanel.playBackgroundMusic();
 	}
 	
+	public void createLevelPanels() {
+		levelOnePanel = new LevelScreenPanel(this, 1);
+		levelOnePanel.setOpaque(false);
+		levelTwoPanel = new LevelScreenPanel(this, 2);
+		levelTwoPanel.setOpaque(false);
+		levelThreePanel = new LevelScreenPanel(this, 3);
+		levelThreePanel.setOpaque(false);
+	}
+	
 	public void switchToGamePanel()
 	{
 		getCenterPanelLayout().show(centerPanel, "Game Panel");
 		welcomeScreenPanel.stopBackgroundMusic();
 		gamePanel.playBackgroundMusic();
+	}
+	
+	public void switchToLevelPanel(int r)
+	{
+		
+		getCenterPanelLayout().show(centerPanel, "Welcome to Level :" + r);
 	}
 	
 	public static Font getGameFont()
@@ -99,8 +123,8 @@ public class Game extends JFrame implements KeyEventDispatcher
         	}
         	else if (e.getKeyCode() == KeyEvent.VK_P)
         	{
-        		switchToGamePanel();
-        		gamePanel.startMoving(game, welcomeScreenPanel);
+				switchToLevelPanel(1);
+        		
         	}
         	else if (e.getKeyCode() == KeyEvent.VK_H)
         	{
@@ -113,6 +137,11 @@ public class Game extends JFrame implements KeyEventDispatcher
         	else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
         	{
         		gamePanel.moveHeroRight();
+        	}
+        	else if (e.getKeyCode() == KeyEvent.VK_ENTER)
+        	{
+        		switchToGamePanel();
+        		gamePanel.startMoving(game, welcomeScreenPanel);
         	}
         	else if (e.getKeyCode() == KeyEvent.VK_SPACE)
         	{
