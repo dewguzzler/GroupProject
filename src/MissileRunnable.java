@@ -90,8 +90,9 @@ public class MissileRunnable extends JPanel implements Runnable {
 						if(x >= es.getX() && x <= es.getX()+ 100  && y <= es.getY()){
 							ms.setHit(true);
 							eShipHit = es;
-							es.setX(-100);
-							es.setY(-100);
+							es.setX(1000);
+							es.setY(1000);
+							es.setHit(true);
 							System.out.println(ms.getX() + " " + es.getX()  + " " + ms.getY()  + " " + es.getY() + " " + x + " " + y);
 							break;
 						}
@@ -107,6 +108,7 @@ public class MissileRunnable extends JPanel implements Runnable {
 						 
 						
 							gp.paintEnemyExplosion(y-15, x-20);
+							
 							Thread.currentThread().sleep(100);
 							gp.repaint();
 							
@@ -129,7 +131,7 @@ public class MissileRunnable extends JPanel implements Runnable {
 //				 //gp.playBackgroundMusic();
 //				
 //				 }
-				 System.out.println(y);
+				 //System.out.println(y);
 				
 				gp.paintMissile(ms, y, x);
 				gp.playFiringMusic();

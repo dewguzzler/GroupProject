@@ -41,7 +41,7 @@ public class Game extends JFrame implements KeyEventDispatcher
         
         centerPanel = new JPanel(new CardLayout());
 		welcomeScreenPanel = new WelcomeScreenPanel(this);
-		gamePanel = new GamePanel();
+		gamePanel = new GamePanel(game);
 	
 		centerPanel.add(welcomeScreenPanel, "Welcome Screen Panel");
 		centerPanel.add(gamePanel, "Game Panel");
@@ -100,6 +100,7 @@ public class Game extends JFrame implements KeyEventDispatcher
         	else if (e.getKeyCode() == KeyEvent.VK_P)
         	{
         		switchToGamePanel();
+        		gamePanel.startMoving(game);
         	}
         	else if (e.getKeyCode() == KeyEvent.VK_H)
         	{
