@@ -35,6 +35,7 @@ public class GamePanel extends JPanel {
 	public Missileship mship;
 	public String name;
 	private GamePanel gamePanel;
+	private WelcomeScreenPanel wsp;
 	private Clip firingSound;
 	private EnemyShip enemy;
 	private EnemyShip[][] enemyArray;
@@ -42,8 +43,10 @@ public class GamePanel extends JPanel {
 	private int enemyShipY = 100;
 	private int firstTime = 0;
 	private static Game game;
-	private static EnemyMovement em;
+	private EnemyMovement em;
 	private static Thread enm;
+
+	int call = 1;
 
 	public GamePanel(Game game2) {
 		super(new BorderLayout());
@@ -173,20 +176,34 @@ public class GamePanel extends JPanel {
 		return y + 30;
 	}
 	
-	public void startMoving(Game g){
+	public void startMoving(Game g, WelcomeScreenPanel wp){
+		this.wsp = wp;
+		enm = null;
+		System.out.println("moving");
 		
+		if (enm == null) {
+
 			
 			try {
-				em = new EnemyMovement(enemyArray, graph, this, hero, g, false, lives);
+				System.out.println(call);
+				EnemyMovement em = new EnemyMovement(enemyArray, graph, this, hero, g, true, lives);
 				enm = new Thread(em);
 				enm.start();
+				call++;
+				System.out.println(enm.isAlive() + " " + enm.isInterrupted());
 				if(enm.isInterrupted()) {
 					System.out.println("inter");
+					throw new InterruptedException();
 				}
-			} catch (Exception e) {
+			} catch (InterruptedException p) {
+				
+			}
+				catch (Exception e) {
+			
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
 	}
 	
 	public void startMovingAgain(Game g){
@@ -298,7 +315,7 @@ public class GamePanel extends JPanel {
 			}
 		}
 		repaint();
-		startMoving(jp);
+		startMoving(jp, wsp);
 		
 	}
 
@@ -306,12 +323,15 @@ public class GamePanel extends JPanel {
 		JFrame gameOver = new JFrame("Game Over");
 		gameOver.setLocationRelativeTo(null);
 		JPanel go = new JPanel();
+		em = null;
 		JLabel over = new JLabel("Game Over");
 		go.add(over);
 		gameOver.add(go);
 		gameOver.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		gameOver.pack();
 		gameOver.setVisible(true);
+		repaint();
+		wsp.repaint();
 
 	}
 

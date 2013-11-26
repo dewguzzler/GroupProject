@@ -17,9 +17,9 @@ public class EnemyMovement extends JPanel implements Runnable {
 	private static HeroShip hns;
 	private static Game theGame;
 	private static boolean playerHit = false;
-	private static int pL;
+	private static int pL = 0;
 	private static boolean startingOver = false;
-	public volatile boolean execute;
+	public volatile boolean execute = true;
 	public int count = 1;
 
 	public EnemyMovement(EnemyShip[][] es, Graphics g, GamePanel gp,
@@ -29,61 +29,76 @@ public class EnemyMovement extends JPanel implements Runnable {
 		EnemyMovement.gnp = gp;
 		EnemyMovement.hns = hs;
 		EnemyMovement.theGame = stop;
-		EnemyMovement.startingOver = startOver;
-		EnemyMovement.pL = lives;
-		this.execute = true;
+		execute = startOver;
+		pL = lives;
 	}
 
 	@Override
 	public void run() {
-		while (execute) {
-			try {
-				moveEnemy(EnemyMovement.ens, EnemyMovement.gs,
-						EnemyMovement.gnp, "right", hns);
-				System.out.println("omg");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		System.out.println(lock);
+		if (EnemyMovement.lock.tryLock()) {
+				try {
+					System.out.println(lock);
+					moveEnemy(EnemyMovement.ens, EnemyMovement.gs,
+							EnemyMovement.gnp, "right", hns);
+					// System.out.println(execute);
+				} catch (InterruptedException p) {
+					System.out.println("interupption");
+					Thread.currentThread().interrupt();
+					EnemyMovement.lock.unlock();
+					System.out.println(lock);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-	}
 
 	// g.drawImage(i, startX+30, startY, 20, 50, o);
 
 	public void moveEnemy(EnemyShip[][] es, Graphics g, GamePanel gp,
 			String direction, HeroShip hs) throws Exception {
+		System.out.println(pL);	
 		while (pL > 0) {
-			System.out.println(execute);
-			if (startingOver) {
-				playerHit = false;
-			}
 
-			if (direction.equalsIgnoreCase("right") && getBottom(es) < 485) {
-				moveRight(es, g, gp, hs);
-			}
-			if (direction.equalsIgnoreCase("left") && getBottom(es) < 485) {
-				moveLeft(es, g, gp, hs);
-			} else {
-				gp.paintPlayerExplosion(hs.getX(), hs.getY(), theGame);
-				pL = pL - 1;
-				System.out.println(pL);
-				if (pL > 0) {
-					// stopExecuting();
-					// startingOver = true;
-					resetEnemy(es);
-					gp.repaint();
-					Thread.currentThread().sleep(2000);
-					//
+				// System.out.println(execute);
+				if (startingOver) {
+					playerHit = false;
+				}
+
+				if (direction.equalsIgnoreCase("right") && getBottom(es) < 485) {
 					moveRight(es, g, gp, hs);
+				}
+				if (direction.equalsIgnoreCase("left") && getBottom(es) < 485) {
+					moveLeft(es, g, gp, hs);
 				} else {
-					gp.paintPlayerExplosion(hs.getX(), hs.getY(), theGame);
+
+					System.out.println(pL);
+					if (pL > 0) {
+						// stopExecuting();
+						// startingOver = true;
+						pL = pL - 1;
+						gp.paintPlayerExplosion(hs.getX(), hs.getY(), theGame);
+						resetEnemy(es);
+						gp.repaint();
+						Thread.currentThread().sleep(2000);
+						//
+						moveRight(es, g, gp, hs);
+					}
+					if (pL == 0) {
+						execute = false;
+						throw new InterruptedException();
+					} else {
+						gp.repaint();
+						throw new InterruptedException();
+					}
 				}
 			}
+		} 
 
-			//
-			// System.out.println(getBottom(es));
-		}
-	}
+		//
+		// System.out.println(getBottom(es));
+
 
 	public void stopExecuting() {
 		execute = false;
@@ -102,7 +117,7 @@ public class EnemyMovement extends JPanel implements Runnable {
 		Thread.currentThread().sleep(300);
 		if (getRight(es) < 800) {
 
-			System.out.println(getLeft(es) + " " + getRight(es));
+			// System.out.println(getLeft(es) + " " + getRight(es));
 			moveEnemy(es, g, gp, "right", hns);
 		} else {
 			moveDown(es, g, gp);
@@ -123,7 +138,7 @@ public class EnemyMovement extends JPanel implements Runnable {
 		Thread.currentThread().sleep(300);
 		if (getLeft(es) > 0) {
 
-			System.out.println(getLeft(es) + " " + getRight(es));
+			// System.out.println(getLeft(es) + " " + getRight(es));
 			moveEnemy(es, g, gp, "left", hns);
 		} else {
 			moveDown(es, g, gp);

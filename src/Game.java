@@ -100,7 +100,7 @@ public class Game extends JFrame implements KeyEventDispatcher
         	else if (e.getKeyCode() == KeyEvent.VK_P)
         	{
         		switchToGamePanel();
-        		gamePanel.startMoving(game);
+        		gamePanel.startMoving(game, welcomeScreenPanel);
         	}
         	else if (e.getKeyCode() == KeyEvent.VK_H)
         	{
