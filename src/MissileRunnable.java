@@ -93,7 +93,7 @@ public class MissileRunnable extends JPanel implements Runnable {
 							es.setX(1000);
 							es.setY(1000);
 							es.setHit(true);
-							System.out.println(ms.getX() + " " + es.getX()  + " " + ms.getY()  + " " + es.getY() + " " + x + " " + y);
+							//System.out.println(ms.getX() + " " + es.getX()  + " " + ms.getY()  + " " + es.getY() + " " + x + " " + y);
 							break;
 						}
 						

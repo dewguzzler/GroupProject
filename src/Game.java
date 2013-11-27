@@ -29,6 +29,7 @@ public class Game extends JFrame implements KeyEventDispatcher
 	public int j = 0;
 	private boolean user;
 	private static Game game;
+	private static int enterCount = 3;
 	
 	public Game()
 	{
@@ -140,8 +141,10 @@ public class Game extends JFrame implements KeyEventDispatcher
         	}
         	else if (e.getKeyCode() == KeyEvent.VK_ENTER)
         	{
-        		switchToGamePanel();
+        		
+        		switchToGamePanel();	
         		gamePanel.startMoving(game, welcomeScreenPanel);
+        			
         	}
         	else if (e.getKeyCode() == KeyEvent.VK_SPACE)
         	{

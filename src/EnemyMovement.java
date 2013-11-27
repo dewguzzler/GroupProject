@@ -13,16 +13,12 @@ public class EnemyMovement extends JPanel implements Runnable {
 	private static EnemyShip[][] ens;
 	private static Graphics gs;
 	private static GamePanel gnp;
+	private static Game theGame;
 	public static final Lock lock = new ReentrantLock();
 	private static HeroShip hns;
-	private static Game theGame;
-	private static boolean playerHit = false;
-	private static int pL = 0;
-	private static boolean startingOver = false;
-	private static boolean move = true;
 	public volatile boolean execute = true;
 	public int count = 1;
-	private int level = 1;
+	public static boolean allHit = false;
 
 	public EnemyMovement(EnemyShip[][] es, Graphics g, GamePanel gp,
 			HeroShip hs, Game stop, boolean startOver, int lives) {
@@ -30,28 +26,32 @@ public class EnemyMovement extends JPanel implements Runnable {
 		EnemyMovement.gs = g;
 		EnemyMovement.gnp = gp;
 		EnemyMovement.hns = hs;
-		EnemyMovement.theGame = stop;
-		execute = startOver;
-		pL = lives;
 	}
 
 	@Override
 	public void run() {
 		System.out.println(lock);
-		if (EnemyMovement.lock.tryLock()) {
-			try {
-				System.out.println(lock);
-				moveEnemy(EnemyMovement.ens, EnemyMovement.gs,
-						EnemyMovement.gnp, "right", hns);
-				// System.out.println(execute);
-			} catch (InterruptedException p) {
-				System.out.println("interupption");
-				Thread.currentThread().interrupt();
-				EnemyMovement.lock.unlock();
-				System.out.println(lock);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		while (execute) {
+			if (EnemyMovement.lock.tryLock()) {
+				try {
+					System.out.println(lock);
+					moveEnemy(EnemyMovement.ens, EnemyMovement.gs,
+							EnemyMovement.gnp, "right", hns);
+					// System.out.println(execute);
+				} catch (InterruptedException p) {
+					System.out.println("interupption");
+					EnemyMovement.lock.unlock();
+					System.out.println(lock);
+					Thread.currentThread().interrupt();
+					if(Thread.currentThread().isInterrupted()){
+						execute = false;
+						//gnp.livesUp();
+					}
+					System.out.println(Thread.currentThread().isInterrupted());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -60,51 +60,49 @@ public class EnemyMovement extends JPanel implements Runnable {
 
 	public void moveEnemy(EnemyShip[][] es, Graphics g, GamePanel gp,
 			String direction, HeroShip hs) throws Exception {
-		//System.out.println(pL);
-		while (pL > 0) {
-			move = moveToNextLevel(es);
-			// System.out.println(execute);
-			if (!move && level <= 3) {
-				if (direction.equalsIgnoreCase("right") && getBottom(es) < 485) {
-					moveRight(es, g, gp, hs);
-				}
-				if (direction.equalsIgnoreCase("left") && getBottom(es) < 485) {
-					moveLeft(es, g, gp, hs);
-				} else {
-
-//					System.out.println(pL);
-					if (pL > 0) {
-						// stopExecuting();
-						// startingOver = true;
-						pL = pL - 1;
-						gp.paintPlayerExplosion(hs.getX(), hs.getY(), theGame);
-						resetEnemy(es);
-						gp.repaint();
-						Thread.currentThread().sleep(2000);
-						//
-						moveRight(es, g, gp, hs);
-					}
-					if (pL == 0) {
-						execute = false;
-						throw new InterruptedException();
-					} else {
-						gp.repaint();
-						throw new InterruptedException();
-					}
-				}
-			} else {
-				System.out.println("it happened");
-				resetEnemy(es);
-				gp.repaint();
-				if(level < 3) {
-				level ++;
-				System.out.println(level);
-				gp.startNextLevel(theGame, level);
-				Thread.currentThread().sleep(5000);
-				//
+		// System.out.println(pL);
+		System.out.println(getBottom(es));
+		if (getBottom(es) >= hs.getY()) {
+			// gp.paintPlayerExplosion(hs.getY(), hs.getX(), theGame);
+			Thread.currentThread().sleep(500);
+			clearEnemy(es);
+			gp.repaint();
+			Thread.currentThread().sleep(5000);
+			gp.paintPlayerExplosion(hs.getY(), hs.getX(), theGame );
+			// gnp.showGameOverScreen(theGame);
+			System.out.println("done");
+			throw new InterruptedException();
+		} else if (getBottom(es) < hs.getY()) {
+			if (direction.equalsIgnoreCase("right")) {
 				moveRight(es, g, gp, hs);
+				if (getRight(es) < 800) {
+					moveEnemy(es, g, gp, "right", hs);
+				} else if (getRight(es) >= 800) {
+					moveDown(es, g, gp);
+					moveEnemy(es, g, gp, "left", hs);
+				}
+				// start moving right
+				// will keep moving right until hits 800
+				// then moves down and starts move left
+			}
+			if (direction.equalsIgnoreCase("left")) {
+				moveLeft(es, g, gp, hs);
+				System.out.println(getLeft(es));
+				if (getLeft(es) > 0) {
+					moveEnemy(es, g, gp, "left", hs);
+				} else if (getLeft(es) <= 0) {
+					moveDown(es, g, gp);
+					moveEnemy(es, g, gp, "right", hs);
 				}
 			}
+
+			else {
+				System.out.println(getLeft(es));
+				throw new InterruptedException();
+			}
+		} else {
+			System.out.println("not sure why");
+			throw new InterruptedException();
 		}
 	}
 
@@ -117,6 +115,7 @@ public class EnemyMovement extends JPanel implements Runnable {
 
 	public void moveRight(EnemyShip[][] es, Graphics g, GamePanel gp,
 			HeroShip hs) throws Exception {
+
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 5; j++) {
 				EnemyShip er = es[i][j];
@@ -126,18 +125,11 @@ public class EnemyMovement extends JPanel implements Runnable {
 		}
 		gnp.repaint();
 		Thread.currentThread().sleep(300);
-		if (getRight(es) < 800) {
-
-			// System.out.println(getLeft(es) + " " + getRight(es));
-			moveEnemy(es, g, gp, "right", hns);
-		} else {
-			moveDown(es, g, gp);
-			moveEnemy(es, g, gp, "left", hns);
-		}
 	}
 
 	public void moveLeft(EnemyShip[][] es, Graphics g, GamePanel gp, HeroShip hs)
 			throws Exception {
+
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 5; j++) {
 				EnemyShip er = es[i][j];
@@ -147,14 +139,6 @@ public class EnemyMovement extends JPanel implements Runnable {
 		}
 		gnp.repaint();
 		Thread.currentThread().sleep(300);
-		if (getLeft(es) > 0) {
-
-			// System.out.println(getLeft(es) + " " + getRight(es));
-			moveEnemy(es, g, gp, "left", hns);
-		} else {
-			moveDown(es, g, gp);
-			moveEnemy(es, g, gp, "right", hns);
-		}
 	}
 
 	public void moveDown(EnemyShip[][] es, Graphics g, GamePanel gp)
@@ -216,30 +200,19 @@ public class EnemyMovement extends JPanel implements Runnable {
 		return bottom;
 	}
 
-	public boolean moveToNextLevel(EnemyShip[][] es) {
-		boolean allEmpty = true;
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 5; j++) {
-				EnemyShip ens = es[i][j];
-				if(!ens.isHit()) {
-					System.out.println(ens.isHit());
-					allEmpty = true;
-					move = false;
-					break;
-				}
-				else {
-					move = true;
-				}
-
-			}
-		}
-		return move;
-	}
-
 	public void resetEnemy(EnemyShip[][] es) {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 5; j++) {
 				es[i][j] = new EnemyShip(100 * j, 100 + 40 * i);
+
+			}
+		}
+	}
+
+	public void clearEnemy(EnemyShip[][] es) {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 5; j++) {
+				es[i][j] = new EnemyShip(1000, 1000);
 
 			}
 		}

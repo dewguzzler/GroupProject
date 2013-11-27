@@ -45,6 +45,7 @@ public class GamePanel extends JPanel {
 	private static Game game;
 	private EnemyMovement em;
 	private static Thread enm;
+	private static int attempts = 1;
 
 	int call = 1;
 
@@ -54,18 +55,14 @@ public class GamePanel extends JPanel {
 		graph = super.getGraphics();
 		GamePanel.game = game2;
 		enemyArray = new EnemyShip[4][5];
-		for(int i = 0; i< 4; i++) {
-			for(int j = 0; j < 5; j++) {
-				enemyArray[i][j] = new EnemyShip(enemyShipX*j, enemyShipY + 40*i);
-				
-				
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 5; j++) {
+				enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+						+ 40 * i);
+
 			}
 		}
-		
-				
 
-			
-		
 		initPointsPanel();
 		initLivesPanel();
 	}
@@ -109,20 +106,19 @@ public class GamePanel extends JPanel {
 				GamePanel.class.getResource("res/images/background.png"));
 		g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), this);
 		hero.draw(g);
-		if(enemyArray != null) {
-		for(int i = 0; i< 4; i++) {
-			for(int j = 0; j < 5; j++) {
-				EnemyShip es = enemyArray[i][j];
-				if(es ==null){
-					
-				}
-				else {
-				es.drawEnemy(g);
+		if (enemyArray != null) {
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 5; j++) {
+					EnemyShip es = enemyArray[i][j];
+					if (es == null) {
+
+					} else {
+						es.drawEnemy(g);
+					}
 				}
 			}
 		}
-		}
-		
+
 	}
 
 	public void playBackgroundMusic() {
@@ -175,56 +171,68 @@ public class GamePanel extends JPanel {
 		int y = hero.getY();
 		return y + 30;
 	}
-	
-	public void startMoving(Game g, WelcomeScreenPanel wp){
+
+	public void startMoving(Game g, WelcomeScreenPanel wp) {
 		this.wsp = wp;
 		enm = null;
-		System.out.println("moving");
-		
+		// System.out.println("moving");
+
 		if (enm == null) {
 
-			
 			try {
-				System.out.println(call);
-				EnemyMovement em = new EnemyMovement(enemyArray, graph, this, hero, g, true, lives);
+				// System.out.println(call);
+				EnemyMovement em = new EnemyMovement(enemyArray, graph, this,
+						hero, g, true, lives);
 				enm = new Thread(em);
 				enm.start();
 				call++;
-				System.out.println(enm.isAlive() + " " + enm.isInterrupted());
-				if(enm.isInterrupted()) {
+				// int enMissileY = 2;
+				// int enmissileX = 1;
+				// EnemyShip shipShooting = enemyArray[2][1];
+				// shootMissile(shipShooting.getX(), shipShooting.getY(),
+				// gamePanel, 5, false, g);
+				// System.out.println(enm.isAlive() + " " +
+				// enm.isInterrupted());
+				if (enm.isInterrupted()) {
 					System.out.println("inter");
 					throw new InterruptedException();
 				}
 			} catch (InterruptedException p) {
-				
-			}
-				catch (Exception e) {
-			
+
+			} catch (Exception e) {
+
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-	
-	public void startMovingAgain(Game g){
-		
-		
+
+	public void startMovingAgain(Game g, WelcomeScreenPanel wsp2) {
+
 		try {
 			System.out.println("movingagain");
-			em = new EnemyMovement(enemyArray, graph, this, hero, g, true, lives);
-			Thread enm = new Thread(em);
+			em = new EnemyMovement(enemyArray, graph, this, hero, g, true,
+					lives);
+			enm = new Thread(em);
 			enm.start();
-		} catch (Exception e) {
+			if(enm.isInterrupted()){
+				throw new InterruptedException();
+			}
+		}catch (InterruptedException p) {
+			System.out.println("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+		}
+			catch (Exception e) {
+		
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-}
+	}
 
 	public void moveMissile() throws Exception {
 		if (mship.getY() > 0) {
 
 			mship.setY(mship.getY() - 30);
-			//System.out.println(mship.getY());
+			// System.out.println(mship.getY());
 			// mship.setVisible(false);
 			// repaint();
 			// repaint();
@@ -251,7 +259,7 @@ public class GamePanel extends JPanel {
 	}
 
 	public void paintEnemyExplosion(int y, int x) {
-		System.out.println("the fuck");
+		// System.out.println("the fuck");
 		Explosion ex = new Explosion();
 		ex.setY(y);
 		ex.setX(x);
@@ -265,7 +273,7 @@ public class GamePanel extends JPanel {
 	}
 
 	public void paintPlayerExplosion(int y, int x, Game jp) throws Exception {
-		//System.out.println("the fuck");
+		// System.out.println("the fuck");
 		Explosion ex = new Explosion();
 		ex.setY(hero.getY());
 		ex.setX(hero.getX());
@@ -274,56 +282,77 @@ public class GamePanel extends JPanel {
 		// mship.setY(y);
 		graph.drawImage(ex.getIcon().getImage(), hero.getX() - 60,
 				hero.getY() - 100, 250, 250, this);
-		System.out.println("drew explosion");
-		
+		System.out.println(lives);
+
 		if (lives - 1 == 0) {
 			lives = lives - 1;
 			livesTextArea.setText("LIVES " + lives + "/3");
 			System.out.println("Game Over");
-			
-			showGameOverScreen();
-			jp.switchToWelcomeScreenPanel();
-			lives = 4;
+
+			//showGameOverScreen(jp);
+			game.switchToWelcomeScreenPanel();
+
+			lives = 3;
 			livesTextArea.setText("LIVES " + lives + "/3");
 			points = 0;
 			pointsTextArea.setText("POINTS " + FORMATTER.format(points));
-			
-			
+			enemyArray = null;
+			enemyArray = new EnemyShip[4][5];
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 5; j++) {
+					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+							+ 40 * i);
+
+				}
+			}
+			attempts = 1;
+
 		}
-		if (lives - 1 > 0) {
+		else if (lives - 1 > 0) {
 			lives = lives - 1;
 			livesTextArea.setText("LIVES " + lives + "/3");
-		} 
+			startLevelOver(jp);
+		}
 
-//		 repaint();
-//		 mship.draw(graph);
-//		 mship.repaint();
-//		 repaint();
+		// repaint();
+		// mship.draw(graph);
+		// mship.repaint();
+		// repaint();
 	}
-	
-	public void startLevelOver(Game jp) throws Exception{
-		if(enm.isInterrupted()){
-			System.out.println("hello");
-		}
-		enemyArray = null;
-		enemyArray = new EnemyShip[4][5];
-		for(int i = 0; i< 4; i++) {
-			for(int j = 0; j < 5; j++) {
-				enemyArray[i][j] = new EnemyShip(enemyShipX*j, enemyShipY + 40*i);
-				
-				
-			}
-		}
-		repaint();
-		startMoving(jp, wsp);
+
+	public void startLevelOver(Game jp) throws Exception {
 		
+		attempts++;
+		if (attempts < 5) {
+			if (enm.isInterrupted()) {
+				System.out.println("hello");
+			}
+			enemyArray = null;
+			enemyArray = new EnemyShip[4][5];
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 5; j++) {
+					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+							+ 40 * i);
+
+				}
+			}
+			repaint();
+			getBottom(enemyArray);
+			startMovingAgain(jp, wsp);
+		}
+		else {
+			enm.interrupt();
+			throw new InterruptedException();
+		}
+
 	}
-	
+
 	public void startNextLevel(Game jp, int level) throws Exception {
 		jp.switchToLevelPanel(level);
 	}
 
-	public void showGameOverScreen() {
+	public void showGameOverScreen(Game jp) {
+		jp.switchToWelcomeScreenPanel();
 		JFrame gameOver = new JFrame("Game Over");
 		gameOver.setLocationRelativeTo(null);
 		JPanel go = new JPanel();
@@ -339,11 +368,11 @@ public class GamePanel extends JPanel {
 
 	}
 
-	public void shootMissile(int x, int y, GamePanel g, int j, boolean user, Game cp)
-			throws Exception {
-		
+	public void shootMissile(int x, int y, GamePanel g, int j, boolean user,
+			Game cp) throws Exception {
+
 		// y = hero.getY();
-		//System.out.println(x + " " + y);
+		// System.out.println(x + " " + y);
 		// mship.setX(hero.getX());
 		// mship.setY(y-60);
 		// mship.draw(graph);
@@ -353,7 +382,7 @@ public class GamePanel extends JPanel {
 		// mship.setY(ys);
 		// mship.draw(graph);
 		// mship.setOpaque(false);
-		
+
 		// moveMissile();
 		// System.out.println(ms);
 		name = "mrs" + j;
@@ -364,14 +393,14 @@ public class GamePanel extends JPanel {
 			Thread miss = new Thread(name);
 			if (!miss.isAlive()) {
 				miss.start();
-				//playFiringMusic();
+				// playFiringMusic();
 			}
 		}
 		if (!user) {
 
 			mship = new Missileship();
-			EnemyMissileRunnable names = new EnemyMissileRunnable(graph, x+15, 0,
-					mship, g, "down", hero, cp);
+			EnemyMissileRunnable names = new EnemyMissileRunnable(graph,
+					x + 15, 0, mship, g, "down", hero, cp);
 			Thread misss = new Thread(names);
 			if (!misss.isAlive()) {
 				misss.start();
@@ -389,6 +418,26 @@ public class GamePanel extends JPanel {
 
 		// graph.drawImage(missile, x+30, y-30, 20, 50, this);
 		// System.out.println(x + " " + y);
+	}
+	
+	public void livesUp(){
+		System.out.println("ended");
+		game.switchToWelcomeScreenPanel();
+	}
+
+	public int getBottom(EnemyShip[][] es) {
+		int bottom = 0;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 5; j++) {
+				EnemyShip ens = es[i][j];
+				if (!ens.isHit()) {
+					if (ens.getY() > bottom) {
+						bottom = ens.getY();
+					}
+				}
+			}
+		}
+		return bottom;
 	}
 
 }
