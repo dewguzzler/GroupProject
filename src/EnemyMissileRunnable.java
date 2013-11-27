@@ -92,7 +92,7 @@ public class EnemyMissileRunnable extends JPanel implements Runnable {
 					if (ms.isHit()) {
 						 
 						
-							gp.paintEnemyExplosion(y-15, x-20);
+							gp.paintEnemyExplosion(y-15, x-20, 0);
 							Thread.currentThread().sleep(100);
 							gp.repaint();
 							

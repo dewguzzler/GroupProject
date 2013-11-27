@@ -1,4 +1,6 @@
 import java.awt.Graphics;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -62,11 +64,22 @@ public class EnemyMovement extends JPanel implements Runnable {
 			String direction, HeroShip hs) throws Exception {
 		// System.out.println(pL);
 		System.out.println(getBottom(es));
-		if (getBottom(es) >= hs.getY()) {
+		System.out.println(isEnemyEmpty(es));
+		if (isEnemyEmpty(es)) {
+			System.out.println("next level please");
+			clearEnemy(es);
+			gp.repaint();
+			Thread.currentThread().sleep(2000);
+			gp.moveUpLevel();
+			allHit = false;
+			throw new InterruptedException();
+		}
+		else if (getBottom(es) >= hs.getY()) {
 			// gp.paintPlayerExplosion(hs.getY(), hs.getX(), theGame);
 			Thread.currentThread().sleep(500);
 			clearEnemy(es);
 			gp.repaint();
+			allHit = false;
 			Thread.currentThread().sleep(5000);
 			gp.paintPlayerExplosion(hs.getY(), hs.getX(), theGame );
 			// gnp.showGameOverScreen(theGame);
@@ -154,6 +167,25 @@ public class EnemyMovement extends JPanel implements Runnable {
 		Thread.currentThread().sleep(300);
 
 	}
+	
+	public boolean isEnemyEmpty(EnemyShip[][] es) {
+		Set<String> tf = new HashSet<String>();
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 5; j++) {
+				EnemyShip ens = es[i][j];
+				if(ens.isHit()){
+					tf.add("true");
+				}
+				else {
+					tf.add("false");
+				}
+			}
+		}
+		if(!tf.contains("false")) {
+			allHit = true;
+		}
+		return allHit;
+	}
 
 	public int getLeft(EnemyShip[][] es) {
 		int left = 1000;
@@ -203,7 +235,18 @@ public class EnemyMovement extends JPanel implements Runnable {
 	public void resetEnemy(EnemyShip[][] es) {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 5; j++) {
-				es[i][j] = new EnemyShip(100 * j, 100 + 40 * i);
+				if(i == 0){
+				es[i][j] = new EnemyShip(100 * j, 100
+						+ 40 * i, 1);
+				}
+				else if (i == 1 || i == 2){
+					es[i][j] = new EnemyShip(100 * j, 100
+							+ 40 * i, 2);
+				}
+				else if (i == 3){
+					es[i][j] = new EnemyShip(100 * j, 100
+							+ 40 * i, 3);
+				}
 
 			}
 		}
@@ -212,7 +255,7 @@ public class EnemyMovement extends JPanel implements Runnable {
 	public void clearEnemy(EnemyShip[][] es) {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 5; j++) {
-				es[i][j] = new EnemyShip(1000, 1000);
+				es[i][j] = new EnemyShip(1000, 1000, 1);
 
 			}
 		}

@@ -6,6 +6,7 @@ import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /** Class: Game.java
@@ -164,6 +165,20 @@ public class Game extends JFrame implements KeyEventDispatcher
         }
         return false;
     }
+	
+	public void gameOverScreen(String wonOrNot, int score){
+		JFrame gameOver = new JFrame("Game Over");
+		gameOver.setLocationRelativeTo(null);
+		JPanel go = new JPanel();
+		JLabel over = new JLabel(wonOrNot);
+		JLabel scores = new JLabel("You Scored: " + score);
+		go.add(over);
+		go.add(scores);
+		gameOver.add(go);
+		gameOver.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		gameOver.pack();
+		gameOver.setVisible(true);
+	}
 	
 	/**
 	 * @param args

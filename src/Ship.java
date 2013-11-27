@@ -18,13 +18,15 @@ public class Ship extends JComponent
 	private int y;
 	private ImageIcon icon;
 	private boolean isHit;
+	public int pointsWorth;
 	
-	public Ship(ImageIcon icon, int x, int y)
+	public Ship(ImageIcon icon, int x, int y, int points)
 	{
 		super();
 		this.icon = icon;
 		this.x = x;
 		this.y = y;
+		this.pointsWorth = points;
 	}
 
 	/**
@@ -33,6 +35,11 @@ public class Ship extends JComponent
 	public int getX()
 	{
 		return x;
+	}
+	
+	public int getPoint()
+	{
+		return pointsWorth;
 	}
 
 	/**

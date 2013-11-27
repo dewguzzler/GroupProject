@@ -23,8 +23,7 @@ import javax.swing.JTextArea;
 public class WelcomeScreenPanel extends JPanel implements ActionListener
 {
 	private static final long serialVersionUID = 1L;
-	
-	private JButton playButton;
+
 	private JButton howToPlayButton;
 	private JPanel buttonPanel;
 	private JTextArea directionsTextArea;
@@ -62,14 +61,6 @@ public class WelcomeScreenPanel extends JPanel implements ActionListener
 		buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		buttonPanel.setOpaque(false);
 		
-		playButton = new JButton("PLAY");
-		playButton.setActionCommand("play");
-		playButton.setOpaque(false);
-		playButton.setForeground(Color.WHITE);
-		playButton.setContentAreaFilled(false);
-		playButton.setBorderPainted(false);
-		playButton.addActionListener(this);
-		
 		howToPlayButton = new JButton("HOW TO PLAY");
 		howToPlayButton.setActionCommand("how to play");
 		howToPlayButton.setOpaque(false);
@@ -79,10 +70,8 @@ public class WelcomeScreenPanel extends JPanel implements ActionListener
 		howToPlayButton.addActionListener(this);
 		
 		Font font = Game.getGameFont();
-		playButton.setFont(font);
 		howToPlayButton.setFont(font);
 		
-		buttonPanel.add(playButton);
 		buttonPanel.add(howToPlayButton);
 		
 		add(buttonPanel, BorderLayout.SOUTH);
@@ -97,8 +86,8 @@ public class WelcomeScreenPanel extends JPanel implements ActionListener
 		welcomeTextArea.setOpaque(false);
 		
 		welcomeTextArea.append("Press P to Play");
+		welcomeTextArea.append("\n");
 		welcomeTextArea.append("\nPress H to read the How to Play instructions");
-		welcomeTextArea.append("\nPress ESC to return to the welcome screen");
 		
 		welcomePanel.add(welcomeTextArea, BorderLayout.CENTER);
 	}
@@ -106,11 +95,18 @@ public class WelcomeScreenPanel extends JPanel implements ActionListener
 	private void initDirectionsTextArea()
 	{
 		directionsTextArea = new JTextArea();
-		directionsTextArea.setFont(Game.getGameFont());
+		directionsTextArea.setFont(Game.getGameFont().deriveFont((float) 40));
 		directionsTextArea.setEditable(false);
 		directionsTextArea.setForeground(Color.WHITE);
 		directionsTextArea.setOpaque(false);
-		directionsTextArea.setText("PLACE HOLDER TEXT");
+		directionsTextArea.append("Use Left and Right arrow keys to control the hero (you)");
+		directionsTextArea.append("\nPress Space to fire a missile at the enemy fleet");
+		directionsTextArea.append("\nWhile dodging enemy fire");
+		directionsTextArea.append("\n");
+		directionsTextArea.append("\nYellow Enemies will score you 15 points");
+		directionsTextArea.append("\nPurple Enemies will score you 20 points");
+		directionsTextArea.append("\nGreen Enemies will score you 30 points");
+		directionsTextArea.append("\nPress ESC to return to the welcome screen");
 		howToPlayPanel.add(directionsTextArea, BorderLayout.CENTER);
 	}
 	

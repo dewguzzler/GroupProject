@@ -14,6 +14,6 @@ public class HeroShip extends Ship
 	public HeroShip()
 	{
 		super(new ImageIcon(HeroShip.class.getResource("res/images/HeroShip.png")),
-				380, 500);
+				380, 500, 0);
 	}
 }

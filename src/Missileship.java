@@ -22,6 +22,6 @@ public class Missileship extends Ship
 	public Missileship()
 	{
 		super(new ImageIcon(Missileship.class.getResource("res/images/bullet.png")),
-				100, 15);
+				100, 15, 0);
 	}
 }

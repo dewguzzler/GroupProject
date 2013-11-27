@@ -22,6 +22,6 @@ public class EnemyMissile extends Ship
 	public EnemyMissile()
 	{
 		super(new ImageIcon(EnemyMissile.class.getResource("res/images/bullet.png")),
-				200, 500);
+				200, 500, 0);
 	}
 }

@@ -29,9 +29,9 @@ public class GamePanel extends JPanel {
 	private Graphics graph;
 	private JTextArea pointsTextArea;
 	private JTextArea livesTextArea;
-	private int points;
+	private int points = 0;
 	private int lives;
-	private int level;
+	private int level = 1;
 	public Missileship mship;
 	public String name;
 	private GamePanel gamePanel;
@@ -57,8 +57,18 @@ public class GamePanel extends JPanel {
 		enemyArray = new EnemyShip[4][5];
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 5; j++) {
+				if(i == 0){
 				enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-						+ 40 * i);
+						+ 40 * i, 1);
+				}
+				else if (i == 1 || i == 2){
+					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+							+ 40 * i, 2);
+				}
+				else if (i == 3){
+					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+							+ 40 * i, 3);
+				}
 
 			}
 		}
@@ -246,6 +256,64 @@ public class GamePanel extends JPanel {
 		}
 
 	}
+	
+	public void moveUpLevel() {
+		System.out.println(level);
+		level++;
+		enemyArray = null;
+		enemyArray = new EnemyShip[4][5];
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 5; j++) {
+				if(i == 0){
+				enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+						+ 40 * i, 1);
+				}
+				else if (i == 1 || i == 2){
+					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+							+ 40 * i, 2);
+				}
+				else if (i == 3){
+					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+							+ 40 * i, 3);
+				}
+
+			}
+		}
+		if(level < 4) {
+		game.switchToLevelPanel(level);
+		}
+		if(level == 4){
+			
+			game.switchToWelcomeScreenPanel();
+			enemyArray = null;
+			enemyArray = new EnemyShip[4][5];
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 5; j++) {
+					if(i == 0){
+					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+							+ 40 * i, 1);
+					}
+					else if (i == 1 || i == 2){
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+								+ 40 * i, 2);
+					}
+					else if (i == 3){
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+								+ 40 * i, 3);
+					}
+
+				}
+			}
+			level = 1;
+			attempts = 1;
+			lives = 3;
+			livesTextArea.setText("LIVES " + lives + "/3");
+			game.gameOverScreen("Congratulations: You Saved Umaran!", points);
+			points = 0;
+			pointsTextArea.setText("POINTS " + FORMATTER.format(points));
+			
+		}
+	}
 
 	public void paintMissile(Missileship ms, int y, int x) {
 
@@ -258,13 +326,13 @@ public class GamePanel extends JPanel {
 		// repaint();
 	}
 
-	public void paintEnemyExplosion(int y, int x) {
+	public void paintEnemyExplosion(int y, int x, int enPoints) {
 		// System.out.println("the fuck");
 		Explosion ex = new Explosion();
 		ex.setY(y);
 		ex.setX(x);
 		graph.drawImage(ex.getIcon().getImage(), x, y, 50, 50, this);
-		points = points + 15;
+		points = points + enPoints;
 		pointsTextArea.setText("POINTS " + FORMATTER.format(points));
 		// repaint();
 		// mship.draw(graph);
@@ -291,7 +359,7 @@ public class GamePanel extends JPanel {
 
 			//showGameOverScreen(jp);
 			game.switchToWelcomeScreenPanel();
-
+			game.gameOverScreen("I'm Sorry, Umaran was destroyed.\nPlease try again", points);
 			lives = 3;
 			livesTextArea.setText("LIVES " + lives + "/3");
 			points = 0;
@@ -300,8 +368,18 @@ public class GamePanel extends JPanel {
 			enemyArray = new EnemyShip[4][5];
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 5; j++) {
+					if(i == 0){
 					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-							+ 40 * i);
+							+ 40 * i, 1);
+					}
+					else if (i == 1 || i == 2){
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+								+ 40 * i, 2);
+					}
+					else if (i == 3){
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+								+ 40 * i, 3);
+					}
 
 				}
 			}
@@ -331,8 +409,18 @@ public class GamePanel extends JPanel {
 			enemyArray = new EnemyShip[4][5];
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 5; j++) {
+					if(i == 0){
 					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-							+ 40 * i);
+							+ 40 * i, 1);
+					}
+					else if (i == 1 || i == 2){
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+								+ 40 * i, 2);
+					}
+					else if (i == 3){
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+								+ 40 * i, 3);
+					}
 
 				}
 			}

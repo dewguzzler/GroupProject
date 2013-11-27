@@ -31,6 +31,7 @@ public class MissileRunnable extends JPanel implements Runnable {
 	private static Game jp;
 	private static EnemyShip[][] ens;
 	private static EnemyShip eShipHit;
+	private static int points;
 
 	public static final Lock lock = new ReentrantLock();
 
@@ -92,6 +93,7 @@ public class MissileRunnable extends JPanel implements Runnable {
 							eShipHit = es;
 							es.setX(1000);
 							es.setY(1000);
+							points = es.getPoint();
 							es.setHit(true);
 							//System.out.println(ms.getX() + " " + es.getX()  + " " + ms.getY()  + " " + es.getY() + " " + x + " " + y);
 							break;
@@ -107,7 +109,7 @@ public class MissileRunnable extends JPanel implements Runnable {
 					if (ms.isHit()) {
 						 
 						
-							gp.paintEnemyExplosion(y-15, x-20);
+							gp.paintEnemyExplosion(y-15, x-20, points);
 							
 							Thread.currentThread().sleep(100);
 							gp.repaint();

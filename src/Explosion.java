@@ -8,6 +8,6 @@ public class Explosion extends Ship
 	public Explosion()
 	{
 		super(new ImageIcon(HeroShip.class.getResource("res/images/explosion.png")),
-				380, 500);
+				380, 500, 0);
 	}
 }
