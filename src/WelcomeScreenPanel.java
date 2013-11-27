@@ -103,9 +103,9 @@ public class WelcomeScreenPanel extends JPanel implements ActionListener
 		directionsTextArea.append("\nPress Space to fire a missile at the enemy fleet");
 		directionsTextArea.append("\nWhile dodging enemy fire");
 		directionsTextArea.append("\n");
-		directionsTextArea.append("\nYellow Enemies will score you 15 points");
-		directionsTextArea.append("\nPurple Enemies will score you 20 points");
-		directionsTextArea.append("\nGreen Enemies will score you 30 points");
+		directionsTextArea.append("\nThe Game will be scored as follows");
+		directionsTextArea.append("\n15 points for Yellow  -  20 points for Purple  -  30 for Green");
+		directionsTextArea.append("\nPhantom hits will not be scored but will clear enemies");
 		directionsTextArea.append("\nPress ESC to return to the welcome screen");
 		howToPlayPanel.add(directionsTextArea, BorderLayout.CENTER);
 	}

@@ -106,7 +106,7 @@ public class EnemyMissileRunnable extends JPanel implements Runnable {
 				gp.repaint();
 			}
 		} else {
-			if (y < 600 && !ms.isHit()) {
+			if (y < 1000 && !ms.isHit()) {
 //				startY = startY - 30;
 				//y = startY;
 				 if (ms.getX() >= hs.getX() && ms.getX() <= hs.getX()+ 100  && ms.getY() >= hs.getY()) {

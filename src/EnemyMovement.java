@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -20,14 +21,17 @@ public class EnemyMovement extends JPanel implements Runnable {
 	private static HeroShip hns;
 	public volatile boolean execute = true;
 	public int count = 1;
+	public static int level;
 	public static boolean allHit = false;
+	private static boolean shootMissile = true;
 
 	public EnemyMovement(EnemyShip[][] es, Graphics g, GamePanel gp,
-			HeroShip hs, Game stop, boolean startOver, int lives) {
+			HeroShip hs, Game stop, boolean startOver, int lives, int level) {
 		EnemyMovement.ens = es;
 		EnemyMovement.gs = g;
 		EnemyMovement.gnp = gp;
 		EnemyMovement.hns = hs;
+		EnemyMovement.level = level;
 	}
 
 	@Override
@@ -74,7 +78,9 @@ public class EnemyMovement extends JPanel implements Runnable {
 			allHit = false;
 			throw new InterruptedException();
 		}
+		
 		else if (getBottom(es) >= hs.getY()) {
+			
 			// gp.paintPlayerExplosion(hs.getY(), hs.getX(), theGame);
 			Thread.currentThread().sleep(500);
 			clearEnemy(es);
@@ -86,6 +92,10 @@ public class EnemyMovement extends JPanel implements Runnable {
 			System.out.println("done");
 			throw new InterruptedException();
 		} else if (getBottom(es) < hs.getY()) {
+//			if(shootMissile) {
+//				System.out.println(shootMissile);
+//				shootMissile(es, gp);
+//			}
 			if (direction.equalsIgnoreCase("right")) {
 				moveRight(es, g, gp, hs);
 				if (getRight(es) < 800) {
@@ -132,12 +142,28 @@ public class EnemyMovement extends JPanel implements Runnable {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 5; j++) {
 				EnemyShip er = es[i][j];
-				er.setX(er.getX() + 20);
+				er.setX(er.getX() + 20* level);
 
 			}
 		}
 		gnp.repaint();
 		Thread.currentThread().sleep(300);
+	}
+	
+	public void shootMissile(EnemyShip[][] es, GamePanel gp) throws Exception {
+		shootMissile = false;
+		Random rnd = new Random();
+		int abc = rnd.nextInt(5);
+		int yRand = rnd.nextInt(4);
+		EnemyShip fShip = es[yRand][abc];
+		if(fShip.getY()<1000){
+			System.out.println("moving");
+			gp.shootEnemyMissile(fShip.getX(), fShip.getY(), gp, 3, theGame);
+		}
+		else if (fShip.getY()>999){
+			
+		}
+		shootMissile = true;
 	}
 
 	public void moveLeft(EnemyShip[][] es, Graphics g, GamePanel gp, HeroShip hs)
@@ -146,7 +172,7 @@ public class EnemyMovement extends JPanel implements Runnable {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 5; j++) {
 				EnemyShip er = es[i][j];
-				er.setX(er.getX() - 20);
+				er.setX(er.getX() - 20 * level);
 
 			}
 		}
@@ -159,7 +185,7 @@ public class EnemyMovement extends JPanel implements Runnable {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 5; j++) {
 				EnemyShip er = es[i][j];
-				er.setY(er.getY() + 100);
+				er.setY(er.getY() + 20 * level);
 
 			}
 		}

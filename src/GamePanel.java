@@ -192,7 +192,7 @@ public class GamePanel extends JPanel {
 			try {
 				// System.out.println(call);
 				EnemyMovement em = new EnemyMovement(enemyArray, graph, this,
-						hero, g, true, lives);
+						hero, g, true, lives, level);
 				enm = new Thread(em);
 				enm.start();
 				call++;
@@ -222,7 +222,7 @@ public class GamePanel extends JPanel {
 		try {
 			System.out.println("movingagain");
 			em = new EnemyMovement(enemyArray, graph, this, hero, g, true,
-					lives);
+					lives, level);
 			enm = new Thread(em);
 			enm.start();
 			if(enm.isInterrupted()){
@@ -459,20 +459,7 @@ public class GamePanel extends JPanel {
 	public void shootMissile(int x, int y, GamePanel g, int j, boolean user,
 			Game cp) throws Exception {
 
-		// y = hero.getY();
-		// System.out.println(x + " " + y);
-		// mship.setX(hero.getX());
-		// mship.setY(y-60);
-		// mship.draw(graph);
-
 		gamePanel = g;
-		// mship.setX(x);
-		// mship.setY(ys);
-		// mship.draw(graph);
-		// mship.setOpaque(false);
-
-		// moveMissile();
-		// System.out.println(ms);
 		name = "mrs" + j;
 		if (user) {
 			mship = new Missileship();
@@ -494,18 +481,18 @@ public class GamePanel extends JPanel {
 				misss.start();
 			}
 		}
+	}
+	
+	public void shootEnemyMissile(int x, int y, GamePanel g, int j,
+			Game cp) throws Exception {
 
-		// //stopBackgroundMusic();
-		// if(miss.isInterrupted()) {
-		// playBackgroundMusic();
-		// }
-		// if(miss.isAlive()){
-		//
-		// System.out.println("interuppted");
-		// }
-
-		// graph.drawImage(missile, x+30, y-30, 20, 50, this);
-		// System.out.println(x + " " + y);
+			mship = new Missileship();
+			EnemyMissileRunnable names = new EnemyMissileRunnable(graph,
+					x + 15, y, mship, g, "down", hero, cp);
+			Thread misss = new Thread(names);
+			if (!misss.isAlive()) {
+				misss.start();
+			}
 	}
 	
 	public void livesUp(){
