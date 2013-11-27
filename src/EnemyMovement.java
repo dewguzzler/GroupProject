@@ -32,6 +32,7 @@ public class EnemyMovement extends JPanel implements Runnable {
 		EnemyMovement.gnp = gp;
 		EnemyMovement.hns = hs;
 		EnemyMovement.level = level;
+		
 	}
 
 	@Override
@@ -39,6 +40,7 @@ public class EnemyMovement extends JPanel implements Runnable {
 		while (execute) {
 			if (EnemyMovement.lock.tryLock()) {
 				try {
+					resetEnemy(ens);
 					moveEnemy(EnemyMovement.ens, EnemyMovement.gs,
 							EnemyMovement.gnp, "right", hns);
 					

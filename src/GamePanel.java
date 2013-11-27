@@ -243,6 +243,8 @@ public class GamePanel extends JPanel {
 	public void startMovingAgain(Game g, WelcomeScreenPanel wsp2) {
 
 		try {
+			
+			
 			em = new EnemyMovement(enemyArray, graph, this, hero, g, true,
 					lives, level);
 			enm = new Thread(em);
