@@ -36,24 +36,19 @@ public class EnemyMovement extends JPanel implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println(lock);
 		while (execute) {
 			if (EnemyMovement.lock.tryLock()) {
 				try {
-					System.out.println(lock);
 					moveEnemy(EnemyMovement.ens, EnemyMovement.gs,
 							EnemyMovement.gnp, "right", hns);
-					// System.out.println(execute);
+					
 				} catch (InterruptedException p) {
-					System.out.println("interupption");
 					EnemyMovement.lock.unlock();
-					System.out.println(lock);
 					Thread.currentThread().interrupt();
 					if(Thread.currentThread().isInterrupted()){
 						execute = false;
-						//gnp.livesUp();
 					}
-					System.out.println(Thread.currentThread().isInterrupted());
+					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -62,15 +57,10 @@ public class EnemyMovement extends JPanel implements Runnable {
 		}
 	}
 
-	// g.drawImage(i, startX+30, startY, 20, 50, o);
 
 	public void moveEnemy(EnemyShip[][] es, Graphics g, GamePanel gp,
 			String direction, HeroShip hs) throws Exception {
-		// System.out.println(pL);
-		System.out.println(getBottom(es));
-		System.out.println(isEnemyEmpty(es));
 		if (isEnemyEmpty(es)) {
-			System.out.println("next level please");
 			clearEnemy(es);
 			gp.repaint();
 			Thread.currentThread().sleep(2000);
@@ -85,17 +75,11 @@ public class EnemyMovement extends JPanel implements Runnable {
 			Thread.currentThread().sleep(500);
 			clearEnemy(es);
 			gp.repaint();
+			Thread.currentThread().sleep(500);
+			gp.paintPlayerExplosion(gp.getHeroY(), gp.getHeroX(), theGame );
 			allHit = false;
-			Thread.currentThread().sleep(5000);
-			gp.paintPlayerExplosion(hs.getY(), hs.getX(), theGame );
-			// gnp.showGameOverScreen(theGame);
-			System.out.println("done");
 			throw new InterruptedException();
 		} else if (getBottom(es) < hs.getY()) {
-//			if(shootMissile) {
-//				System.out.println(shootMissile);
-//				shootMissile(es, gp);
-//			}
 			if (direction.equalsIgnoreCase("right")) {
 				moveRight(es, g, gp, hs);
 				if (getRight(es) < 800) {
@@ -110,7 +94,6 @@ public class EnemyMovement extends JPanel implements Runnable {
 			}
 			if (direction.equalsIgnoreCase("left")) {
 				moveLeft(es, g, gp, hs);
-				System.out.println(getLeft(es));
 				if (getLeft(es) > 0) {
 					moveEnemy(es, g, gp, "left", hs);
 				} else if (getLeft(es) <= 0) {
@@ -120,17 +103,13 @@ public class EnemyMovement extends JPanel implements Runnable {
 			}
 
 			else {
-				System.out.println(getLeft(es));
 				throw new InterruptedException();
 			}
 		} else {
-			System.out.println("not sure why");
 			throw new InterruptedException();
 		}
 	}
 
-	//
-	// System.out.println(getBottom(es));
 
 	public void stopExecuting() {
 		execute = false;
@@ -157,7 +136,6 @@ public class EnemyMovement extends JPanel implements Runnable {
 		int yRand = rnd.nextInt(4);
 		EnemyShip fShip = es[yRand][abc];
 		if(fShip.getY()<1000){
-			System.out.println("moving");
 			gp.shootEnemyMissile(fShip.getX(), fShip.getY(), gp, 3, theGame);
 		}
 		else if (fShip.getY()>999){

@@ -152,7 +152,6 @@ public class Game extends JFrame implements KeyEventDispatcher
         		int x = gamePanel.getHeroX() + 30;
         		
         		int y = gamePanel.getHeroY();
-        		System.out.println(y);
         		try {
         			user = true;
 					gamePanel.shootMissile(x, y, gamePanel, j, user, game);
@@ -169,9 +168,10 @@ public class Game extends JFrame implements KeyEventDispatcher
 	public void gameOverScreen(String wonOrNot, int score){
 		JFrame gameOver = new JFrame("Game Over");
 		gameOver.setLocationRelativeTo(null);
+		gameOver.setResizable(false);
 		JPanel go = new JPanel();
 		JLabel over = new JLabel(wonOrNot);
-		JLabel scores = new JLabel("You Scored: " + score);
+		JLabel scores = new JLabel("You Scored: " + score + " points");
 		go.add(over);
 		go.add(scores);
 		gameOver.add(go);

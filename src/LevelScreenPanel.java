@@ -66,15 +66,19 @@ public class LevelScreenPanel extends JPanel implements ActionListener
 		}
 		else if (level == 2) {
 			welcomeTextArea.append("Level 2");
-			welcomeTextArea.append("\nYour planet of Umaran is under attack by");
-			welcomeTextArea.append("\nyour enemy, Umacran. Defend your planet soldier!");
-			welcomeTextArea.append("\n\n\nHit Enter to Start your defense!");
+			welcomeTextArea.append("\nYou saved Umaran from the Umacrans!");
+			welcomeTextArea.append("\nNow is the time to go on the offensive!");
+			welcomeTextArea.append("\nYou catch up to another group while pursuing");
+			welcomeTextArea.append("\nThese are special and are faster than before");
+			welcomeTextArea.append("\n\n\nHit Enter to hunt them down!");
 		}
 		else if (level == 3) {
 			welcomeTextArea.append("Level 3");
-			welcomeTextArea.append("\nYour planet of Umaran is under attack by");
-			welcomeTextArea.append("\nyour enemy, Umacran. Defend your planet soldier!");
-			welcomeTextArea.append("\n\n\nHit Enter to Start your defense!");
+			welcomeTextArea.append("\nYes, Yes! keep them on the run!");
+			welcomeTextArea.append("\nNow you head home to lick your wounds");
+			welcomeTextArea.append("\nAs you turn Your back, they attack your rear flank");
+			welcomeTextArea.append("\nTheir fastest ships are here");
+			welcomeTextArea.append("\n\n\nHit Enter to destroy them for good");
 		}
 	}
 	

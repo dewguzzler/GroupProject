@@ -26,9 +26,12 @@ public class GamePanel extends JPanel {
 	private Clip backgroundMusic;
 	private JPanel pointsPanel;
 	private JPanel livesPanel;
+	private JPanel levelPanel;
+	private JPanel infoPanel;
 	private Graphics graph;
 	private JTextArea pointsTextArea;
 	private JTextArea livesTextArea;
+	private JTextArea levelTextArea;
 	private int points = 0;
 	private int lives;
 	private int level = 1;
@@ -57,15 +60,13 @@ public class GamePanel extends JPanel {
 		enemyArray = new EnemyShip[4][5];
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 5; j++) {
-				if(i == 0){
-				enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-						+ 40 * i, 1);
-				}
-				else if (i == 1 || i == 2){
+				if (i == 0) {
+					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+							+ 40 * i, 1);
+				} else if (i == 1 || i == 2) {
 					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
 							+ 40 * i, 2);
-				}
-				else if (i == 3){
+				} else if (i == 3) {
 					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
 							+ 40 * i, 3);
 				}
@@ -73,9 +74,25 @@ public class GamePanel extends JPanel {
 			}
 		}
 
+
+		initLevelPanel();
 		initPointsPanel();
 		initLivesPanel();
+		initInfoPanel();
 	}
+	
+	
+	private void initInfoPanel() {
+		infoPanel = new JPanel();
+		infoPanel.setOpaque(false);
+		infoPanel.setSize(1000, 100);
+		infoPanel.add(livesPanel, BorderLayout.WEST);
+		infoPanel.add(levelPanel);
+		infoPanel.add(pointsPanel, BorderLayout.EAST);
+		add(infoPanel, BorderLayout.NORTH);
+	}
+	
+	
 
 	private void initPointsPanel() {
 		points = 0;
@@ -90,7 +107,7 @@ public class GamePanel extends JPanel {
 		pointsTextArea.setOpaque(false);
 
 		pointsPanel.add(pointsTextArea);
-		add(pointsPanel, BorderLayout.EAST);
+		//add(pointsPanel, BorderLayout.EAST);
 	}
 
 	private void initLivesPanel() {
@@ -106,7 +123,24 @@ public class GamePanel extends JPanel {
 		livesTextArea.setOpaque(false);
 
 		livesPanel.add(livesTextArea);
-		add(livesPanel, BorderLayout.WEST);
+		//add(livesPanel, BorderLayout.WEST);
+	}
+	
+	private void initLevelPanel() {
+		
+
+		levelPanel = new JPanel();
+		levelPanel.setOpaque(false);
+		levelPanel.setSize(100, 100);
+
+		levelTextArea = new JTextArea("Level " + Integer.toString(level));
+		levelTextArea.setFont(Game.getGameFont().deriveFont((float) 40));
+		levelTextArea.setEditable(false);
+		levelTextArea.setForeground(Color.WHITE);
+		levelTextArea.setOpaque(false);
+
+		levelPanel.add(levelTextArea);
+		//add(levelPanel, BorderLayout.NORTH);
 	}
 
 	public void paintComponent(Graphics g) {
@@ -185,26 +219,15 @@ public class GamePanel extends JPanel {
 	public void startMoving(Game g, WelcomeScreenPanel wp) {
 		this.wsp = wp;
 		enm = null;
-		// System.out.println("moving");
 
 		if (enm == null) {
 
 			try {
-				// System.out.println(call);
 				EnemyMovement em = new EnemyMovement(enemyArray, graph, this,
 						hero, g, true, lives, level);
 				enm = new Thread(em);
 				enm.start();
-				call++;
-				// int enMissileY = 2;
-				// int enmissileX = 1;
-				// EnemyShip shipShooting = enemyArray[2][1];
-				// shootMissile(shipShooting.getX(), shipShooting.getY(),
-				// gamePanel, 5, false, g);
-				// System.out.println(enm.isAlive() + " " +
-				// enm.isInterrupted());
 				if (enm.isInterrupted()) {
-					System.out.println("inter");
 					throw new InterruptedException();
 				}
 			} catch (InterruptedException p) {
@@ -220,19 +243,16 @@ public class GamePanel extends JPanel {
 	public void startMovingAgain(Game g, WelcomeScreenPanel wsp2) {
 
 		try {
-			System.out.println("movingagain");
 			em = new EnemyMovement(enemyArray, graph, this, hero, g, true,
 					lives, level);
 			enm = new Thread(em);
 			enm.start();
-			if(enm.isInterrupted()){
+			if (enm.isInterrupted()) {
 				throw new InterruptedException();
 			}
-		}catch (InterruptedException p) {
-			System.out.println("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
-		}
-			catch (Exception e) {
-		
+		} catch (InterruptedException p) {
+		} catch (Exception e) {
+
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -242,184 +262,151 @@ public class GamePanel extends JPanel {
 		if (mship.getY() > 0) {
 
 			mship.setY(mship.getY() - 30);
-			// System.out.println(mship.getY());
-			// mship.setVisible(false);
-			// repaint();
-			// repaint();
 			graph.drawImage(mship.getIcon().getImage(), mship.getX(),
 					mship.getY(), this);
 			mship.setOpaque(false);
-			// mship.draw(graph);
-			// mship.update(graph);
-			// Thread.sleep(24);
-			// moveMissile();
 		}
 
 	}
-	
+
 	public void moveUpLevel() {
-		System.out.println(level);
 		level++;
+		levelTextArea.setText("Level: " + Integer.toString(level));
 		enemyArray = null;
 		enemyArray = new EnemyShip[4][5];
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 5; j++) {
-				if(i == 0){
-				enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-						+ 40 * i, 1);
-				}
-				else if (i == 1 || i == 2){
+				if (i == 0) {
+					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
+							+ 40 * i, 1);
+				} else if (i == 1 || i == 2) {
 					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
 							+ 40 * i, 2);
-				}
-				else if (i == 3){
+				} else if (i == 3) {
 					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
 							+ 40 * i, 3);
 				}
 
 			}
 		}
-		if(level < 4) {
-		game.switchToLevelPanel(level);
+		if (level < 4) {
+			game.switchToLevelPanel(level);
 		}
-		if(level == 4){
-			
+		if (level == 4) {
+
 			game.switchToWelcomeScreenPanel();
 			enemyArray = null;
 			enemyArray = new EnemyShip[4][5];
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 5; j++) {
-					if(i == 0){
-					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-							+ 40 * i, 1);
-					}
-					else if (i == 1 || i == 2){
-						enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-								+ 40 * i, 2);
-					}
-					else if (i == 3){
-						enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-								+ 40 * i, 3);
+					if (i == 0) {
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j,
+								enemyShipY + 40 * i, 1);
+					} else if (i == 1 || i == 2) {
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j,
+								enemyShipY + 40 * i, 2);
+					} else if (i == 3) {
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j,
+								enemyShipY + 40 * i, 3);
 					}
 
 				}
 			}
 			level = 1;
+			levelTextArea.setText("Level: " + Integer.toString(level));
 			attempts = 1;
 			lives = 3;
 			livesTextArea.setText("LIVES " + lives + "/3");
 			game.gameOverScreen("Congratulations: You Saved Umaran!", points);
 			points = 0;
 			pointsTextArea.setText("POINTS " + FORMATTER.format(points));
-			
+
 		}
 	}
 
 	public void paintMissile(Missileship ms, int y, int x) {
 
-		// mship = new Missileship();
+		
 		mship.setX(x);
 		mship.setY(y);
 		graph.drawImage(mship.getIcon().getImage(), x, y, 10, 20, this);
-		// mship.draw(graph);
-		// mship.repaint();
-		// repaint();
 	}
 
 	public void paintEnemyExplosion(int y, int x, int enPoints) {
-		// System.out.println("the fuck");
 		Explosion ex = new Explosion();
 		ex.setY(y);
 		ex.setX(x);
 		graph.drawImage(ex.getIcon().getImage(), x, y, 50, 50, this);
 		points = points + enPoints;
 		pointsTextArea.setText("POINTS " + FORMATTER.format(points));
-		// repaint();
-		// mship.draw(graph);
-		// mship.repaint();
-		// repaint();
 	}
 
 	public void paintPlayerExplosion(int y, int x, Game jp) throws Exception {
-		// System.out.println("the fuck");
+		
 		Explosion ex = new Explosion();
 		ex.setY(hero.getY());
 		ex.setX(hero.getX());
-		// mship = new Missileship();
-		// mship.setX(x);
-		// mship.setY(y);
 		graph.drawImage(ex.getIcon().getImage(), hero.getX() - 60,
 				hero.getY() - 100, 250, 250, this);
-		System.out.println(lives);
 
 		if (lives - 1 == 0) {
 			lives = lives - 1;
 			livesTextArea.setText("LIVES " + lives + "/3");
-			System.out.println("Game Over");
-
-			//showGameOverScreen(jp);
 			game.switchToWelcomeScreenPanel();
-			game.gameOverScreen("I'm Sorry, Umaran was destroyed.\nPlease try again", points);
+			game.gameOverScreen(
+					"I'm Sorry, Umaran was destroyed.  Please try again",
+					points);
 			lives = 3;
 			livesTextArea.setText("LIVES " + lives + "/3");
 			points = 0;
 			pointsTextArea.setText("POINTS " + FORMATTER.format(points));
+			level = 1;
+			levelTextArea.setText("Level: " + Integer.toString(level));
 			enemyArray = null;
 			enemyArray = new EnemyShip[4][5];
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 5; j++) {
-					if(i == 0){
-					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-							+ 40 * i, 1);
-					}
-					else if (i == 1 || i == 2){
-						enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-								+ 40 * i, 2);
-					}
-					else if (i == 3){
-						enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-								+ 40 * i, 3);
+					if (i == 0) {
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j,
+								enemyShipY + 40 * i, 1);
+					} else if (i == 1 || i == 2) {
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j,
+								enemyShipY + 40 * i, 2);
+					} else if (i == 3) {
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j,
+								enemyShipY + 40 * i, 3);
 					}
 
 				}
 			}
 			attempts = 1;
+			level = 1;
 
-		}
-		else if (lives - 1 > 0) {
+		} else if (lives - 1 > 0) {
 			lives = lives - 1;
 			livesTextArea.setText("LIVES " + lives + "/3");
 			startLevelOver(jp);
 		}
-
-		// repaint();
-		// mship.draw(graph);
-		// mship.repaint();
-		// repaint();
 	}
 
 	public void startLevelOver(Game jp) throws Exception {
-		
+
+		Thread.currentThread().sleep(2000);
 		attempts++;
 		if (attempts < 5) {
-			if (enm.isInterrupted()) {
-				System.out.println("hello");
-			}
 			enemyArray = null;
 			enemyArray = new EnemyShip[4][5];
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 5; j++) {
-					if(i == 0){
-					enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-							+ 40 * i, 1);
-					}
-					else if (i == 1 || i == 2){
-						enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-								+ 40 * i, 2);
-					}
-					else if (i == 3){
-						enemyArray[i][j] = new EnemyShip(enemyShipX * j, enemyShipY
-								+ 40 * i, 3);
+					if (i == 0) {
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j,
+								enemyShipY + 40 * i, 1);
+					} else if (i == 1 || i == 2) {
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j,
+								enemyShipY + 40 * i, 2);
+					} else if (i == 3) {
+						enemyArray[i][j] = new EnemyShip(enemyShipX * j,
+								enemyShipY + 40 * i, 3);
 					}
 
 				}
@@ -427,8 +414,7 @@ public class GamePanel extends JPanel {
 			repaint();
 			getBottom(enemyArray);
 			startMovingAgain(jp, wsp);
-		}
-		else {
+		} else {
 			enm.interrupt();
 			throw new InterruptedException();
 		}
@@ -468,7 +454,6 @@ public class GamePanel extends JPanel {
 			Thread miss = new Thread(name);
 			if (!miss.isAlive()) {
 				miss.start();
-				// playFiringMusic();
 			}
 		}
 		if (!user) {
@@ -482,21 +467,20 @@ public class GamePanel extends JPanel {
 			}
 		}
 	}
-	
-	public void shootEnemyMissile(int x, int y, GamePanel g, int j,
-			Game cp) throws Exception {
 
-			mship = new Missileship();
-			EnemyMissileRunnable names = new EnemyMissileRunnable(graph,
-					x + 15, y, mship, g, "down", hero, cp);
-			Thread misss = new Thread(names);
-			if (!misss.isAlive()) {
-				misss.start();
-			}
+	public void shootEnemyMissile(int x, int y, GamePanel g, int j, Game cp)
+			throws Exception {
+
+		mship = new Missileship();
+		EnemyMissileRunnable names = new EnemyMissileRunnable(graph, x + 15, y,
+				mship, g, "down", hero, cp);
+		Thread misss = new Thread(names);
+		if (!misss.isAlive()) {
+			misss.start();
+		}
 	}
-	
-	public void livesUp(){
-		System.out.println("ended");
+
+	public void livesUp() {
 		game.switchToWelcomeScreenPanel();
 	}
 
