@@ -6,34 +6,40 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.JPanel;
 
 /**
+ * Class: MissileRunnable
  * 
- */
-
-/**
- * @author jesse
+ * @author Jesse Perkins Date: November 24th 2013
  * 
+ *         This class - runs a thread for shooting missiles
+ * 
+ *         Purpose - so the player can shoot enemies
  */
 
 public class MissileRunnable extends JPanel implements Runnable {
 
 	/**
-	 * 
-	 */
+  * 
+  */
 	private static final long serialVersionUID = 1L;
-	public static int startX;
-	public static int startY;
-	public static Graphics g;
-	public static GamePanel gp;
-	public static Image i;
-	private static Missileship ms;
-	private static String dir;
-	private static HeroShip hs;
-	private static Game jp;
-	private static EnemyShip[][] ens;
-	private static EnemyShip eShipHit;
-	private static int points;
+	public static int startX; // initial x coordinate of the missile
+	public static int startY; // initial y coordinate of the missile
+	public static Graphics g; // graphics representation
+	public static GamePanel gp; // represents the public GamePanel method in
+								// GamePanel.java
+	public static Image i; // represents the missile image
+	private static Missileship ms; // represents the method Missileship from
+									// Missileship.java
+	private static String dir; // direction missile is moving in
+	private static HeroShip hs; // represents the method HeroShip from
+								// HeroShip.java
+	private static Game jp; // represents the method Game from Game.java
+	private static EnemyShip[][] ens; // creates an array of enemy ships through
+										// the method EnemyShip from
+										// EnemyShip.java
+	private static EnemyShip eShipHit; // determines if a ship is hit
+	private static int points; // # of points added for a ship being hit
 
-	public static final Lock lock = new ReentrantLock();
+	public static final Lock lock = new ReentrantLock(); // locks the thread
 
 	public MissileRunnable(Graphics g, int startX, int startY, Missileship ms,
 			GamePanel gp, String dir, HeroShip hs, Game jp, EnemyShip[][] es) {
@@ -68,6 +74,17 @@ public class MissileRunnable extends JPanel implements Runnable {
 		}
 
 	}
+
+	/**
+	 * Method: moveMissile* moves a missile up to shoot enemies
+	 * 
+	 * @param int x returns x coordinate of the missile
+	 * @param int y returns the y coordinate of the missile
+	 * @param String
+	 *            dir is the direction the missile moves
+	 * @param HeroShip
+	 *            hs is the method HeroShip from HeroShip.java
+	 */
 
 	public void moveMissile(int x, int y, String dir, HeroShip hs)
 			throws Exception {

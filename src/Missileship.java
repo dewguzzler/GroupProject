@@ -1,27 +1,24 @@
-import java.awt.Graphics;
-import java.awt.image.ImageObserver;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-/**
- * 
- */
 
-/**
- * @author jesse
+/**Clas: Missileship
+ * @author Jesse Perkins
+ * Date: November 23, 2013
+ * 
+ * This class - displays an image representing the missile
+ * 
+ * purpose - So the user can see the missile while shooting
  *
  */
 public class Missileship extends Ship
 {
-	private static final long serialVersionUID = 1L;
-
-	public Missileship()
-	{
-		super(new ImageIcon(Missileship.class.getResource("res/images/bullet.png")),
-				100, 15, 0);
-	}
+ private static final long serialVersionUID = 1L;
+ /** Method: Missileship* shows an image of the missile
+  */
+ public Missileship()
+ {
+  super(new ImageIcon(Missileship.class.getResource("res/images/bullet.png")),
+    100, 15, 0);
+ }
 }
